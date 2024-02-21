@@ -1764,3 +1764,280 @@
 2024-02-21 23:22:06,521 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
 2024-02-21 23:22:06,521 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
 2024-02-21 23:22:06,521 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:06,756 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:08,522 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: status_report
+2024-02-21 23:22:08,757 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:09,510 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,510 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,511 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:09,511 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,511 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,511 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,511 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:09,512 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,512 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,512 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,512 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,512 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:09,512 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,512 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:09,757 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:10,757 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:12,517 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,517 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,517 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,517 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,517 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,518 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,518 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,518 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:12,518 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,519 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,519 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,518 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:12,519 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:12,520 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:12,758 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:14,520 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: status_report
+2024-02-21 23:22:14,758 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:15,460 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,460 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,460 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,460 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:15,461 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:15,461 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,461 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,461 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,461 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,461 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,461 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,461 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,461 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:15,461 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:15,758 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:16,758 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:18,414 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,414 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,414 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,414 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,414 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,414 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,414 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,415 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,415 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,415 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:18,415 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:18,415 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,415 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:18,415 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:18,759 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:19,906 DEBUG   SenderThread:513485 [sender.py:send():380] send: stats
+2024-02-21 23:22:19,906 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: status_report
+2024-02-21 23:22:19,919 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: stop_status
+2024-02-21 23:22:19,919 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-21 23:22:19,920 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: stop_status
+2024-02-21 23:22:20,759 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:21,349 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,351 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,351 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,351 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:21,351 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,352 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:21,352 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,352 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,352 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,352 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:21,352 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,352 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,352 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,352 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:21,760 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:22,760 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:24,268 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,268 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:24,269 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:24,269 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:24,269 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:24,760 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:25,270 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: status_report
+2024-02-21 23:22:26,761 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:27,212 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,213 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,213 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,213 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,213 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,213 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,213 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,213 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,213 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:27,213 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:27,214 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,214 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:27,214 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,214 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:27,761 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:28,761 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:30,215 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:30,216 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:30,216 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:30,217 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:30,761 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:31,217 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: status_report
+2024-02-21 23:22:32,762 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:34,257 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,258 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,258 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,258 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,259 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,259 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,259 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:34,259 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,259 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,259 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,259 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,259 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:34,259 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:34,260 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:34,762 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:34,920 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-21 23:22:34,920 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: stop_status
+2024-02-21 23:22:34,920 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: stop_status
+2024-02-21 23:22:36,271 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: status_report
+2024-02-21 23:22:36,763 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:37,295 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,295 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:37,296 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:37,296 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:37,296 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:37,763 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:38,763 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:40,253 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,253 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,254 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,254 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,254 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,254 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,254 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,254 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,254 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,254 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,254 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:40,255 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:40,255 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:40,255 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:40,763 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:42,255 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: status_report
+2024-02-21 23:22:42,764 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:43,256 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,257 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,257 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,257 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,257 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,257 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,257 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,257 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,257 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,257 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:43,257 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:43,258 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,258 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:43,258 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:43,764 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:44,764 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:46,187 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,187 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,187 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,187 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,188 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:46,188 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:46,188 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:46,188 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,188 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,188 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,188 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,188 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,189 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,189 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:46,765 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:48,189 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: status_report
+2024-02-21 23:22:48,765 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:49,211 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,211 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,211 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,211 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,211 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:49,212 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,212 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:49,212 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,212 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,212 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,212 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,212 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,212 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:49,212 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:49,766 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:49,907 DEBUG   SenderThread:513485 [sender.py:send():380] send: stats
+2024-02-21 23:22:49,922 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: internal_messages
+2024-02-21 23:22:49,923 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: stop_status
+2024-02-21 23:22:49,924 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: stop_status
+2024-02-21 23:22:50,766 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:52,772 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,772 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:52,773 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:52,773 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:52,774 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:53,767 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json
+2024-02-21 23:22:53,774 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: status_report
+2024-02-21 23:22:54,767 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/output.log
+2024-02-21 23:22:56,115 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,116 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,116 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,116 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,116 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,117 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,117 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,117 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,117 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,117 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,117 DEBUG   HandlerThread:513485 [handler.py:handle_request():146] handle_request: partial_history
+2024-02-21 23:22:56,117 DEBUG   SenderThread:513485 [sender.py:send():380] send: history
+2024-02-21 23:22:56,117 DEBUG   SenderThread:513485 [sender.py:send_request():407] send_request: summary_record
+2024-02-21 23:22:56,117 INFO    SenderThread:513485 [sender.py:_save_file():1380] saving file wandb-summary.json with policy end
+2024-02-21 23:22:56,767 INFO    Thread-12 :513485 [dir_watcher.py:_on_file_modified():288] file/dir modified: /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_231648-80behhni/files/wandb-summary.json

@@ -20,6 +20,7 @@ from domainbed import hparams_registry
 from domainbed import algorithms
 from domainbed.lib import misc
 from domainbed.lib.fast_data_loader import InfiniteDataLoader, FastDataLoader
+from domainbed.utils.logging import Logging
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Domain generalization')
@@ -27,27 +28,41 @@ if __name__ == "__main__":
     parser.add_argument('--dataset', type=str, default="RotatedMNIST")
     parser.add_argument('--algorithm', type=str, default="ERM")
     parser.add_argument('--task', type=str, default="domain_generalization",
-        choices=["domain_generalization", "domain_adaptation"])
+                        choices=["domain_generalization", "domain_adaptation"])
     parser.add_argument('--hparams', type=str,
-        help='JSON-serialized hparams dict')
+                        help='JSON-serialized hparams dict')
     parser.add_argument('--hparams_seed', type=int, default=0,
-        help='Seed for random hparams (0 means "default hparams")')
+                        help='Seed for random hparams (0 means "default hparams")')
     parser.add_argument('--trial_seed', type=int, default=0,
-        help='Trial number (used for seeding split_dataset and '
-        'random_hparams).')
+                        help='Trial number (used for seeding split_dataset and '
+                             'random_hparams).')
     parser.add_argument('--seed', type=int, default=0,
-        help='Seed for everything else')
+                        help='Seed for everything else')
     parser.add_argument('--steps', type=int, default=None,
-        help='Number of steps. Default is dataset-dependent.')
-    parser.add_argument('--checkpoint_freq', type=int, default=None,
-        help='Checkpoint every N steps. Default is dataset-dependent.')
+                        help='Number of steps. Default is dataset-dependent.')
+    parser.add_argument('--checkpoint_freq', type=int, default=100,
+                        help='Checkpoint every N steps. Default is dataset-dependent.')
     parser.add_argument('--test_envs', type=int, nargs='+', default=[0])
     parser.add_argument('--output_dir', type=str, default="train_output")
     parser.add_argument('--holdout_fraction', type=float, default=0.2)
     parser.add_argument('--uda_holdout_fraction', type=float, default=0,
-        help="For domain adaptation, % of test to use unlabeled for training.")
+                        help="For domain adaptation, % of test to use unlabeled for training.")
     parser.add_argument('--skip_model_save', action='store_true')
     parser.add_argument('--save_model_every_checkpoint', action='store_true')
+
+    # LOGGING
+    parser.add_argument('--wandb', action='store_true',
+                        help='toggle to use wandb for online saving')
+    parser.add_argument('--log', action='store_true',
+                        help='toggle to use tensorboard for offline saving')
+    parser.add_argument('--wandb_prj', type=str, default="DomainBed",
+                        help='toggle to use wandb for online saving')
+    parser.add_argument('--wandb_entity', type=str, default="scalemind",
+                        help='toggle to use wandb for online saving')
+    parser.add_argument("--verbose", action="store_true",
+                        help="printout mode")
+    parser.add_argument("--mode", type=str, default="train",
+                        help="train/valid mode")
     args = parser.parse_args()
 
     # If we ever want to implement checkpointing, just persist these values
@@ -76,10 +91,13 @@ if __name__ == "__main__":
         hparams = hparams_registry.default_hparams(args.algorithm, args.dataset)
     else:
         hparams = hparams_registry.random_hparams(args.algorithm, args.dataset,
-            misc.seed_hash(args.hparams_seed, args.trial_seed))
+                                                  misc.seed_hash(args.hparams_seed, args.trial_seed))
     # print(hparams)
     if args.hparams:
         hparams.update(json.loads(args.hparams))
+
+    # Setup
+    log_interface = Logging(args, hparams)
 
     print('HParams:')
     for k, v in sorted(hparams.items()):
@@ -98,7 +116,7 @@ if __name__ == "__main__":
 
     if args.dataset in vars(datasets):
         dataset = vars(datasets)[args.dataset](args.data_dir,
-            args.test_envs, hparams)
+                                               args.test_envs, hparams)
     else:
         raise NotImplementedError
 
@@ -120,13 +138,13 @@ if __name__ == "__main__":
     for env_i, env in enumerate(dataset):
         uda = []
         out, in_ = misc.split_dataset(env,
-            int(len(env)*args.holdout_fraction),
-            misc.seed_hash(args.trial_seed, env_i))
+                                      int(len(env) * args.holdout_fraction),
+                                      misc.seed_hash(args.trial_seed, env_i))
 
         if env_i in args.test_envs:
             uda, in_ = misc.split_dataset(in_,
-                int(len(in_)*args.uda_holdout_fraction),
-                misc.seed_hash(args.trial_seed, env_i))
+                                          int(len(in_) * args.uda_holdout_fraction),
+                                          misc.seed_hash(args.trial_seed, env_i))
 
         if hparams['class_balanced']:
             in_weights = misc.make_weights_for_balanced_classes(in_)
@@ -163,15 +181,15 @@ if __name__ == "__main__":
         for env, _ in (in_splits + out_splits + uda_splits)]
     eval_weights = [None for _, weights in (in_splits + out_splits + uda_splits)]
     eval_loader_names = ['env{}_in'.format(i)
-        for i in range(len(in_splits))]
+                         for i in range(len(in_splits))]
     eval_loader_names += ['env{}_out'.format(i)
-        for i in range(len(out_splits))]
+                          for i in range(len(out_splits))]
     eval_loader_names += ['env{}_uda'.format(i)
-        for i in range(len(uda_splits))]
+                          for i in range(len(uda_splits))]
 
     algorithm_class = algorithms.get_algorithm_class(args.algorithm)
     algorithm = algorithm_class(dataset.input_shape, dataset.num_classes,
-        len(dataset) - len(args.test_envs), hparams)
+                                len(dataset) - len(args.test_envs), hparams)
 
     if algorithm_dict is not None:
         algorithm.load_state_dict(algorithm_dict)
@@ -182,10 +200,11 @@ if __name__ == "__main__":
     uda_minibatches_iterator = zip(*uda_loaders)
     checkpoint_vals = collections.defaultdict(lambda: [])
 
-    steps_per_epoch = min([len(env)/hparams['batch_size'] for env,_ in in_splits])
+    steps_per_epoch = min([len(env) / hparams['batch_size'] for env, _ in in_splits])
 
     n_steps = args.steps or dataset.N_STEPS
     checkpoint_freq = args.checkpoint_freq or dataset.CHECKPOINT_FREQ
+
 
     def save_checkpoint(filename):
         if args.skip_model_save:
@@ -200,15 +219,15 @@ if __name__ == "__main__":
         }
         torch.save(save_dict, os.path.join(args.output_dir, filename))
 
-
+    c_counter = 0
     last_results_keys = None
     for step in range(start_step, n_steps):
         step_start_time = time.time()
         minibatches_device = [(x.to(device), y.to(device))
-            for x,y in next(train_minibatches_iterator)]
+                              for x, y in next(train_minibatches_iterator)]
         if args.task == "domain_adaptation":
             uda_device = [x.to(device)
-                for x,_ in next(uda_minibatches_iterator)]
+                          for x, _ in next(uda_minibatches_iterator)]
         else:
             uda_device = None
         step_vals = algorithm.update(minibatches_device, uda_device)
@@ -229,16 +248,16 @@ if __name__ == "__main__":
             evals = zip(eval_loader_names, eval_loaders, eval_weights)
             for name, loader, weights in evals:
                 acc = misc.accuracy(algorithm, loader, weights, device)
-                results[name+'_acc'] = acc
+                results[name + '_acc'] = acc
 
-            results['mem_gb'] = torch.cuda.max_memory_allocated() / (1024.*1024.*1024.)
+            results['mem_gb'] = torch.cuda.max_memory_allocated() / (1024. * 1024. * 1024.)
 
             results_keys = sorted(results.keys())
             if results_keys != last_results_keys:
                 misc.print_row(results_keys, colwidth=12)
                 last_results_keys = results_keys
             misc.print_row([results[key] for key in results_keys],
-                colwidth=12)
+                           colwidth=12)
 
             results.update({
                 'hparams': hparams,
@@ -246,9 +265,10 @@ if __name__ == "__main__":
             })
 
             epochs_path = os.path.join(args.output_dir, 'results.jsonl')
+
             # with open(epochs_path, 'a') as f:
             #     f.write(json.dumps(results, sort_keys=True) + "\n")
-            
+
             def check_and_convert(value):
                 """
                 Kiểm tra và chuyển đổi giá trị nếu cần.
@@ -263,6 +283,7 @@ if __name__ == "__main__":
                 else:
                     return value, False
 
+
             def validate_and_report(results):
                 """
                 Duyệt qua results và báo cáo nếu có giá trị không thể serialize bằng JSON.
@@ -272,16 +293,23 @@ if __name__ == "__main__":
                     _, error = check_and_convert(value)
                     if error:
                         errors.append(key)
-                
+
                 if errors:
                     print(f"Có lỗi ở các phần tử sau: {errors}")
                 # else:
-                    # print("Tất cả các phần tử đều có thể serialize bằng JSON.")
+                # print("Tất cả các phần tử đều có thể serialize bằng JSON.")
                 return errors
+
 
             # Kiểm tra và in ra báo cáo
             errors = validate_and_report(results)
 
+            for key, value in results.items():
+                if (key != "hparams") and (key != "args"):
+                    log_interface(key=f"test/{key}", value=value)
+
+            log_interface.step(epoch=int(step//checkpoint_freq), test_len=int(n_steps//checkpoint_freq))
+            c_counter += 1
             # Nếu không có lỗi, ghi vào file
             if not errors:
                 with open('epochs_path.json', 'a') as f:

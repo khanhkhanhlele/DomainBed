@@ -1,0 +1,48 @@
+HParams:
+	batch_size: 64
+	class_balanced: False
+	data_augmentation: True
+	lr: 0.001
+	nonlinear_classifier: False
+	penalty: 1000
+	resnet18: False
+	resnet_dropout: 0.0
+	weight_decay: 0.0
+env0_in_acc   env0_out_acc  env1_in_acc   env1_out_acc  env2_in_acc   env2_out_acc  epoch         loss          mem_gb        penalty       step          step_time
+0.7727126634  0.7715387913  0.7018267531  0.7233176168  0.2363529223  0.2338191170  0.0000000000  0.7345536947  0.3132276535  2.0225620270  0             0.2982556820
+0.8982215556  0.8960565795  0.7967000589  0.8066866695  0.0986232389  0.0936562366  0.3428510205  0.5119432241  0.3159971237  0.4260887902  100           0.0534199715
+0.8982215556  0.8960565795  0.7967000589  0.8066866695  0.0986232389  0.0936562366  0.6857020410  0.6358232909  0.3159971237  0.0710781459  200           0.0464147711
+0.5715663167  0.5720102872  0.5479187872  0.5512216031  0.4052606203  0.4089155594  1.0285530616  0.6691398180  0.3159971237  0.0322377353  300           0.0496008158
+0.5138740090  0.5122160309  0.5057052553  0.5079297042  0.4708308780  0.4729961423  1.3714040821  0.6798589414  0.3159971237  0.0203691745  400           0.0471959615
+0.5183201200  0.5173596228  0.5080623560  0.5126446635  0.4652595489  0.4646378054  1.7142551026  0.6846545327  0.3159971237  0.0188380946  500           0.0466533422
+0.5914398972  0.5992284612  0.5640970697  0.5655807973  0.3952429421  0.4029147021  2.0571061231  0.6868882912  0.3159971237  0.0185435609  600           0.0503709984
+0.7904971073  0.7914702100  0.7168264852  0.7198885555  0.2096748272  0.2102443206  2.3999571436  0.6884991491  0.3159971237  0.0117229283  700           0.0475232053
+0.6661667024  0.6678096871  0.6224888841  0.6213030433  0.3297798254  0.3336905272  2.7428081641  0.6892638069  0.3159971237  0.0106039448  800           0.0545778632
+0.7269659310  0.7265323618  0.6678095034  0.6682383198  0.2668880913  0.2726103729  3.0856591847  0.6900660527  0.3159971237  0.0096516596  900           0.0466024017
+0.7747482323  0.7796828118  0.7043981357  0.7117445349  0.2137461831  0.2138876982  3.4285102052  0.6906220454  0.3159971237  0.0096211912  1000          0.0497630978
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/domainbed/scripts/train.py", line 233, in <module>
+    step_vals = algorithm.update(minibatches_device, uda_device)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/domainbed/algorithms.py", line 1218, in update
+    objective.backward()
+  File "/home/duong/Documents/git/.env/lib/python3.11/site-packages/torch/_tensor.py", line 492, in backward
+    torch.autograd.backward(
+  File "/home/duong/Documents/git/.env/lib/python3.11/site-packages/torch/autograd/__init__.py", line 251, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/domainbed/scripts/train.py", line 233, in <module>
+    step_vals = algorithm.update(minibatches_device, uda_device)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/domainbed/algorithms.py", line 1218, in update
+    objective.backward()
+  File "/home/duong/Documents/git/.env/lib/python3.11/site-packages/torch/_tensor.py", line 492, in backward
+    torch.autograd.backward(
+  File "/home/duong/Documents/git/.env/lib/python3.11/site-packages/torch/autograd/__init__.py", line 251, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+KeyboardInterrupt

@@ -1,0 +1,107 @@
+wandb_version: 1
+
+data_dir:
+  desc: null
+  value: ./domainbed/data/MNIST/
+dataset:
+  desc: null
+  value: ColoredMNIST
+algorithm:
+  desc: null
+  value: ERM
+task:
+  desc: null
+  value: domain_generalization
+hparams:
+  desc: null
+  value: null
+hparams_seed:
+  desc: null
+  value: 0
+trial_seed:
+  desc: null
+  value: 0
+seed:
+  desc: null
+  value: 0
+steps:
+  desc: null
+  value: 100000
+checkpoint_freq:
+  desc: null
+  value: 100
+test_envs:
+  desc: null
+  value:
+  - 2
+output_dir:
+  desc: null
+  value: train_output
+holdout_fraction:
+  desc: null
+  value: 0.2
+uda_holdout_fraction:
+  desc: null
+  value: 0
+skip_model_save:
+  desc: null
+  value: false
+save_model_every_checkpoint:
+  desc: null
+  value: false
+wandb:
+  desc: null
+  value: true
+log:
+  desc: null
+  value: false
+wandb_prj:
+  desc: null
+  value: DomainBed
+wandb_entity:
+  desc: null
+  value: scalemind
+verbose:
+  desc: null
+  value: false
+mode:
+  desc: null
+  value: train
+run_name:
+  desc: null
+  value: ColoredMNIST_ERM_domain_generalization-100000-[2]__1708532207
+_wandb:
+  desc: null
+  value:
+    python_version: 3.11.5
+    cli_version: 0.16.0
+    framework: torch
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    start_time: 1708532208.65775
+    t:
+      1:
+      - 1
+      - 2
+      - 3
+      - 5
+      - 41
+      - 53
+      - 55
+      2:
+      - 1
+      - 2
+      - 3
+      - 5
+      - 41
+      - 53
+      - 55
+      3:
+      - 13
+      - 16
+      - 23
+      4: 3.11.5
+      5: 0.16.0
+      8:
+      - 5
+      13: linux-x86_64

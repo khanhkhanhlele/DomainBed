@@ -1,0 +1,216 @@
+{
+    "os": "Linux-6.5.0-18-generic-x86_64-with-glibc2.35",
+    "python": "3.11.5",
+    "heartbeatAt": "2024-02-21T14:08:07.759880",
+    "startedAt": "2024-02-21T14:08:06.605985",
+    "docker": null,
+    "cuda": null,
+    "args": [
+        "--data_dir=./domainbed/data/MNIST/",
+        "--algorithm",
+        "CausIRL_CORAL",
+        "--dataset",
+        "ColoredMNIST",
+        "--test_env",
+        "2",
+        "--wandb"
+    ],
+    "state": "running",
+    "program": "-m domainbed.scripts.train",
+    "codePathLocal": null,
+    "git": {
+        "remote": "https://github.com/khanhkhanhlele/DomainBed",
+        "commit": "c60753c8903ef5f6aae39a83988ef93eab190f58"
+    },
+    "email": "mduongbkhn@gmail.com",
+    "root": "/home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed",
+    "host": "sky",
+    "username": "duong",
+    "executable": "/home/duong/Documents/git/.env/bin/python3",
+    "cpu_count": 24,
+    "cpu_count_logical": 32,
+    "cpu_freq": {
+        "current": 1831.31284375,
+        "min": 800.0,
+        "max": 4575.0
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3870.947,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 4817.568,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3889.189,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 3840.765,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 4841.841,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 2949.324,
+            "min": 800.0,
+            "max": 5400.0
+        },
+        {
+            "current": 799.729,
+            "min": 800.0,
+            "max": 5400.0
+        },
+        {
+            "current": 5055.046,
+            "min": 800.0,
+            "max": 5400.0
+        },
+        {
+            "current": 5047.013,
+            "min": 800.0,
+            "max": 5400.0
+        },
+        {
+            "current": 3990.142,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 2700.316,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 5200.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.131,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        },
+        {
+            "current": 800.0,
+            "min": 800.0,
+            "max": 3900.0
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 937.3305015563965,
+            "used": 256.92165756225586
+        }
+    },
+    "gpu": "NVIDIA GeForce RTX 4070 Laptop GPU",
+    "gpu_count": 1,
+    "gpu_devices": [
+        {
+            "name": "NVIDIA GeForce RTX 4070 Laptop GPU",
+            "memory_total": 8585740288
+        }
+    ],
+    "memory": {
+        "total": 15.34946060180664
+    }
+}

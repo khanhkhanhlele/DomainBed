@@ -1,0 +1,30 @@
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_setup.py:_flush():76] Current SDK version is 0.16.0
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_setup.py:_flush():76] Configure stats pid to 503346
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_setup.py:_flush():76] Loading settings from /home/duong/.config/wandb/settings
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_setup.py:_flush():76] Loading settings from /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/settings
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-02-21 20:58:03,452 WARNING MainThread:503346 [wandb_setup.py:_flush():76] Could not find program at -m domainbed.scripts.train
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': None, 'program': '-m domainbed.scripts.train'}
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_setup.py:_flush():76] Applying login settings: {'force': True}
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_init.py:_log_setup():524] Logging user logs to /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_205803-x7navvx1/logs/debug.log
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_init.py:_log_setup():525] Logging internal logs to /home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainBed/wandb/run-20240221_205803-x7navvx1/logs/debug-internal.log
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_init.py:init():564] calling init triggers
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_init.py:init():571] wandb.init called with sweep_config: {}
+config: {'data_dir': './domainbed/data/MNIST/', 'dataset': 'ColoredMNIST', 'algorithm': 'IGA', 'task': 'domain_generalization', 'hparams': None, 'hparams_seed': 0, 'trial_seed': 0, 'seed': 0, 'steps': None, 'checkpoint_freq': 100, 'test_envs': [2], 'output_dir': 'train_output', 'holdout_fraction': 0.2, 'uda_holdout_fraction': 0, 'skip_model_save': False, 'save_model_every_checkpoint': False, 'wandb': True, 'log': False, 'wandb_prj': 'DomainBed', 'wandb_entity': 'scalemind', 'verbose': False, 'mode': 'train', 'run_name': 'ColoredMNIST_IGA_domain_generalization-None-[2]__1708523880'}
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_init.py:init():614] starting backend
+2024-02-21 20:58:03,452 INFO    MainThread:503346 [wandb_init.py:init():618] setting up manager
+2024-02-21 20:58:03,453 INFO    MainThread:503346 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-02-21 20:58:03,454 INFO    MainThread:503346 [wandb_init.py:init():624] backend started and connected
+2024-02-21 20:58:03,547 INFO    MainThread:503346 [wandb_init.py:init():716] updated telemetry
+2024-02-21 20:58:03,549 INFO    MainThread:503346 [wandb_init.py:init():749] communicating run to backend with 90.0 second timeout
+2024-02-21 20:58:04,282 INFO    MainThread:503346 [wandb_run.py:_on_init():2254] communicating current version
+2024-02-21 20:58:04,518 INFO    MainThread:503346 [wandb_run.py:_on_init():2263] got version response upgrade_message: "wandb version 0.16.3 is available!  To upgrade, please run:\n $ pip install wandb --upgrade"
+
+2024-02-21 20:58:04,518 INFO    MainThread:503346 [wandb_init.py:init():800] starting run threads in backend
+2024-02-21 20:58:04,550 INFO    MainThread:503346 [wandb_run.py:_console_start():2233] atexit reg
+2024-02-21 20:58:04,550 INFO    MainThread:503346 [wandb_run.py:_redirect():2088] redirect: wrap_raw
+2024-02-21 20:58:04,550 INFO    MainThread:503346 [wandb_run.py:_redirect():2153] Wrapping output streams.
+2024-02-21 20:58:04,551 INFO    MainThread:503346 [wandb_run.py:_redirect():2178] Redirects installed.
+2024-02-21 20:58:04,551 INFO    MainThread:503346 [wandb_init.py:init():841] run started, returning control to user process
+2024-02-21 21:03:54,884 WARNING MsgRouterThr:503346 [router.py:message_loop():77] message_loop has been closed

@@ -5,4 +5,4 @@ domainbed/data/*
 train_output/*
 
 .env
-wandb/
+wandb/*

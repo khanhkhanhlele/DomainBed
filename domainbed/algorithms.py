@@ -98,6 +98,8 @@ class Algorithm(torch.nn.Module):
         total_diff_norm = torch.sum(torch.stack(diff_norms))
         return total_diff_norm.item()
 
+    def grad_norm(self, model1, model2):
+        pass
 
 class ERM(Algorithm):
     """
@@ -212,7 +214,7 @@ class Fish_T(Algorithm):
         )
         self.network.reset_weights(meta_weights)
         
-        diff = [self.diff_weight(self.network_specific[i_domain],self.network) for i_domain in range(self.num_domains)]
+        diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
         print(diff)
 
         return {'loss': loss.item()}

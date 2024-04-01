@@ -55,6 +55,7 @@ ALGORITHMS = [
     'CAG' , #CA Grad
     'GradBase',
     'CAG1',
+    'Fish_T',
 ]
 
 def get_algorithm_class(algorithm_name):
@@ -123,7 +124,92 @@ class ERM(Algorithm):
     def predict(self, x):
         return self.network(x)
 
+class Fish_T(Algorithm):
+    """
+    Implementation of Fish, as seen in Gradient Matching for Domain
+    Generalization, Shi et al. 2021.
+    """
 
+    def __init__(self, input_shape, num_classes, num_domains, hparams):
+        super(Fish_T, self).__init__(input_shape, num_classes, num_domains,
+                                   hparams)
+        self.input_shape = input_shape
+        self.num_classes = num_classes
+        self.num_domains = num_domains
+
+        self.network = networks.WholeFish(input_shape, num_classes, hparams)
+        self.optimizer = torch.optim.Adam(
+            self.network.parameters(),
+            lr=self.hparams["lr"],
+            weight_decay=self.hparams['weight_decay']
+        )
+        self.optimizer_inner_state = None
+        self.optimizer_specific_state = [None] * num_domains
+
+    def create_clone(self, device, n_domain):
+        self.network_inner = networks.WholeFish(self.input_shape, self.num_classes, self.hparams,
+                                            weights=self.network.state_dict()).to(device)
+        self.optimizer_inner = torch.optim.Adam(
+            self.network_inner.parameters(),
+            lr=self.hparams["lr"],
+            weight_decay=self.hparams['weight_decay']
+        )
+        if self.optimizer_inner_state is not None:
+            self.optimizer_inner.load_state_dict(self.optimizer_inner_state)
+        self.network_specific = []
+        self.optimizer_specific = []
+        for i_domain in range(n_domain):
+            self.network_specific.append(networks.WholeFish(self.input_shape, self.num_classes, self.hparams, weights=self.network.state_dict()).to(device))
+            self.optimizer_specific.append(torch.optim.Adam(
+                self.network_specific[i_domain].parameters(),
+                lr=self.hparams["lr"],
+                weight_decay=self.hparams['weight_decay']
+            ))
+            if self.optimizer_specific_state[i_domain] is not None:
+                self.optimizer_specific[i_domain].load_state_dict(self.optimizer_specific_state[i_domain])
+
+    def fish(self, meta_weights, inner_weights, lr_meta):
+        meta_weights = ParamDict(meta_weights)
+        inner_weights = ParamDict(inner_weights)
+        meta_weights += lr_meta * (inner_weights - meta_weights)
+        return meta_weights
+    
+
+    def update(self, minibatches, unlabeled=None):
+        self.create_clone(minibatches[0][0].device, self.num_domains)
+        for i_domain, (x, y) in enumerate(minibatches):
+            loss = F.cross_entropy(self.network_inner(x), y)
+            self.optimizer_inner.zero_grad()
+            loss.backward()
+            self.optimizer_inner.step()
+            
+            loss = F.cross_entropy(self.network_specific[i_domain](x), y)
+            self.optimizer_specific[i_domain].zero_grad()
+            loss.backward()
+            self.optimizer_specific[i_domain].step()
+            self.optimizer_specific_state[i_domain] = self.optimizer_specific[i_domain].state_dict()
+            
+            loss = F.cross_entropy(self.network(x), y)
+            self.optimizer.zero_grad()
+            loss.backward()
+            self.optimizer.step()
+
+        self.optimizer_inner_state = self.optimizer_inner.state_dict()
+        meta_weights = self.fish(
+            meta_weights=self.network.state_dict(),
+            inner_weights=self.network_inner.state_dict(),
+            lr_meta=self.hparams["meta_lr"]
+        )
+        self.network.reset_weights(meta_weights)
+        
+        diff = [self.diff_weight(self.network_specific[i_domain],self.network) for i_domain in range(self.num_domains)]
+        print(diff)
+
+        return {'loss': loss.item()}
+
+    def predict(self, x):
+        return self.network(x)
+    
 class Fish(Algorithm):
     """
     Implementation of Fish, as seen in Gradient Matching for Domain

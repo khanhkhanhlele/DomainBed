@@ -87,6 +87,16 @@ class Algorithm(torch.nn.Module):
 
     def predict(self, x):
         raise NotImplementedError
+    def diff_weight(self, model1, model2):
+        params1 = [p.data for p in model1.parameters()]
+        params2 = [p.data for p in model2.parameters()]
+
+        # Tính hiệu và norm của hiệu giữa các parameter tương ứng
+        diff_norms = [torch.norm(p1 - p2, p='fro') for p1, p2 in zip(params1, params2)]
+
+        # Tính tổng (hoặc trung bình) của các norm này để có một đại lượng đơn lẻ mô tả sự khác biệt
+        total_diff_norm = torch.sum(torch.stack(diff_norms))
+        return total_diff_norm.item()
 
 
 class ERM(Algorithm):

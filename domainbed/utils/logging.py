@@ -12,15 +12,15 @@ class Logging:
         self.__epoch = 0
 
         if args.wandb:
-            wandb.login(key="1eac4d04cc3cc4aed9a1409cd8eb7dc0f6537ef2")
+            # wandb.login(key="1eac4d04cc3cc4aed9a1409cd8eb7dc0f6537ef2")
             args.run_name = (f"{args.dataset}_{args.algorithm}"
                              f"_{args.hparams_seed}_{args.trial_seed}"
                              f"_{args.test_envs}"
                              f"__{int(time.time())}")
 
             self.__run = wandb.init(
-                project="DomainBed3",
-                entity="namkhanh2172",
+                project="DoG-CaG",
+                entity="DomainBed",
                 config=args,
                 name=args.run_name,
                 force=True
@@ -64,7 +64,7 @@ class Logging:
             if log_key.split("/")[0] in ['train']:
                 self.__log_avg[log_key] = self.__log[log_key]
             else:
-                self.__log_avg[log_key] = self.__log[log_key] / test_len
+                self.__log_avg[log_key] = self.__log[log_key]
 
 
         if self.__args.wandb:

@@ -215,12 +215,21 @@ class Fish_T(Algorithm):
         self.network.reset_weights(meta_weights)
 
         diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
-        print(f"domain difference: {diff}")
+        domain_diff_dict = {f"domain_{i}": value for i, value in enumerate(diff)}
+
+
+        # Then, define the existing dictionary
+        result_dict = {'loss': loss.item()}
 
         grad_norm = self.diff_weight(model_origin, self.network)
-        print(f"grad progress: {grad_norm}")
+        grad_norm_dict = {f"grad_progress": grad_norm}
 
-        return {'loss': loss.item()}
+        # print(domain_diff_dict)
+        # print(grad_norm_dict)
+
+        result_dict.update(domain_diff_dict)
+        result_dict.update(grad_norm_dict)
+        return result_dict
 
     def predict(self, x):
         return self.network(x)

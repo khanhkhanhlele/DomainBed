@@ -103,6 +103,16 @@ class Algorithm(torch.nn.Module):
         total_diff_norm = torch.sum(torch.stack(diff_norms))
         return total_diff_norm.item()
 
+    def cos_sim(self, prev_model, model1, model2):
+        prev_param = torch.cat([p.data.view(-1) for p in prev_model.parameters()])
+        params1 = torch.cat([p.data.view(-1) for p in model1.parameters()])
+        params2 = torch.cat([p.data.view(-1) for p in model2.parameters()])
+
+        grad1 = params1 - prev_param
+        grad2 = params2 - prev_param
+
+        cos_sim = torch.dot(grad1, grad2) / (torch.norm(grad1) * torch.norm(grad2))
+        return cos_sim.item()
 
 class ERM(Algorithm):
     """
@@ -215,8 +225,10 @@ class Fish_T(Algorithm):
         self.network.reset_weights(meta_weights)
 
         diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
-        domain_diff_dict = {f"domain_{i}": value for i, value in enumerate(diff)}
+        domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
 
+        angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
+        domain_angle_dict = {f"angle_{i}": value for i, value in enumerate(angle)}
 
         # Then, define the existing dictionary
         result_dict = {'loss': loss.item()}
@@ -228,6 +240,7 @@ class Fish_T(Algorithm):
         # print(grad_norm_dict)
 
         result_dict.update(domain_diff_dict)
+        result_dict.update(domain_angle_dict)
         result_dict.update(grad_norm_dict)
         return result_dict
 

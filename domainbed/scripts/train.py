@@ -263,7 +263,7 @@ if __name__ == "__main__":
             with open(epochs_path, 'a') as f:
                 f.write(json.dumps(results, sort_keys=True) + "\n")
             
-            #logging
+            # logging
             if args.wandb:
                 for key, value in results.items():
                     if (key != "hparams") and (key != "args"):

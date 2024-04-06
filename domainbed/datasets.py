@@ -54,7 +54,7 @@ def num_environments(dataset_name):
 class MultipleDomainDataset:
     N_STEPS = 5001           # Default, subclasses may override
     CHECKPOINT_FREQ = 100    # Default, subclasses may override
-    N_WORKERS = 8            # Default, subclasses may override
+    N_WORKERS = 1            # Default, subclasses may override
     ENVIRONMENTS = None      # Subclasses should override
     INPUT_SHAPE = None       # Subclasses should override
 
@@ -229,6 +229,7 @@ class VLCS(MultipleEnvironmentImageFolder):
     ENVIRONMENTS = ["C", "L", "S", "V"]
     def __init__(self, root, test_envs, hparams):
         self.dir = os.path.join(root, "VLCS/")
+        # self.dir = "/home/duong/Documents/git/DomainGeneralization/DomainBed/domainbed/data/VLCS"
         super().__init__(self.dir, test_envs, hparams['data_augmentation'], hparams)
 
 class PACS(MultipleEnvironmentImageFolder):

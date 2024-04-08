@@ -37,7 +37,6 @@ def _hparams(algorithm, dataset, random_seed):
 
     # Algorithm-specific hparam definitions. Each block of code below
     # corresponds to exactly one algorithm.
-
     if algorithm in ['DANN', 'CDANN']:
         _hparam('lambda', 1.0, lambda r: 10**r.uniform(-2, 2))
         _hparam('weight_decay_d', 0., lambda r: 10**r.uniform(-6, -2))
@@ -48,7 +47,7 @@ def _hparams(algorithm, dataset, random_seed):
         _hparam('mlp_depth', 3, lambda r: int(r.choice([3, 4, 5])))
         _hparam('mlp_dropout', 0., lambda r: r.choice([0., 0.1, 0.5]))
 
-    elif algorithm == 'Fish' or 'Fish_T':
+    elif algorithm == 'Fish' or algorithm == 'Fish_T':
         _hparam('meta_lr', 0.5, lambda r:r.choice([0.05, 0.1, 0.5]))
         
     elif algorithm == 'CAG' or algorithm == 'CAG1':
@@ -79,34 +78,50 @@ def _hparams(algorithm, dataset, random_seed):
         _hparam('groupdro_eta', 1e-2, lambda r: 10**r.uniform(-3, -1))
 
     elif algorithm == "MMD" or algorithm == "CORAL" or algorithm == "CausIRL_CORAL" or algorithm == "CausIRL_MMD":
+        print(algorithm)
+
         _hparam('mmd_gamma', 1., lambda r: 10**r.uniform(-1, 1))
 
     elif algorithm == "MLDG":
+        print(algorithm)
+
         _hparam('mldg_beta', 1., lambda r: 10**r.uniform(-1, 1))
         _hparam('n_meta_test', 2, lambda r:  r.choice([1, 2]))
 
     elif algorithm == "MTL":
+        print(algorithm)
+
         _hparam('mtl_ema', .99, lambda r: r.choice([0.5, 0.9, 0.99, 1.]))
 
     elif algorithm == "VREx":
+        print(algorithm)
+
         _hparam('vrex_lambda', 1e1, lambda r: 10**r.uniform(-1, 5))
         _hparam('vrex_penalty_anneal_iters', 500,
                 lambda r: int(10**r.uniform(0, 4)))
 
     elif algorithm == "SD":
+        print(algorithm)
+
         _hparam('sd_reg', 0.1, lambda r: 10**r.uniform(-5, -1))
 
     elif algorithm == "ANDMask":
+        print(algorithm)
+
         _hparam('tau', 1, lambda r: r.uniform(0.5, 1.))
 
     elif algorithm == "IGA":
+        print(algorithm)
+
         _hparam('penalty', 1000, lambda r: 10**r.uniform(1, 5))
 
     elif algorithm == "SANDMask":
+        print(algorithm)
+
         _hparam('tau', 1.0, lambda r: r.uniform(0.0, 1.))
         _hparam('k', 1e+1, lambda r: 10**r.uniform(-3, 5))
 
-    elif algorithm == "Fishr":
+    elif algorithm == "Fishr" or algorithm == "Fishr_T":
         _hparam('lambda', 1000., lambda r: 10**r.uniform(1., 4.))
         _hparam('penalty_anneal_iters', 1500, lambda r: int(r.uniform(0., 5000.)))
         _hparam('ema', 0.95, lambda r: r.uniform(0.90, 0.99))

@@ -97,6 +97,9 @@ class Algorithm(torch.nn.Module):
         params1 = [p.data for p in model1.parameters()]
         params2 = [p.data for p in model2.parameters()]
 
+        # print(f"p1:{params1[0]}")
+        # print(f"p2:{params2[0]}")
+
         # Tính hiệu và norm của hiệu giữa các parameter tương ứng
         diff_norms = [torch.norm(p1 - p2, p='fro') for p1, p2 in zip(params1, params2)]
 
@@ -108,6 +111,10 @@ class Algorithm(torch.nn.Module):
         prev_param = torch.cat([p.data.view(-1) for p in prev_model.parameters()])
         params1 = torch.cat([p.data.view(-1) for p in model1.parameters()])
         params2 = torch.cat([p.data.view(-1) for p in model2.parameters()])
+
+        # print(f"prev:{prev_param[0]}")
+        # print(f"p1:{params1[0]}")
+        # print(f"p2:{params2[0]}")
 
         grad1 = params1 - prev_param
         grad2 = params2 - prev_param
@@ -150,6 +157,88 @@ class ERM(Algorithm):
     def predict(self, x):
         return self.network(x)
 
+class ERM_T(Algorithm):
+    """
+    Empirical Risk Minimization (ERM)
+    """
+
+    def __init__(self, input_shape, num_classes, num_domains, hparams):
+        super(ERM_T, self).__init__(input_shape, num_classes, num_domains,
+                                  hparams)
+        self.featurizer = networks.Featurizer(input_shape, self.hparams)
+        self.classifier = networks.Classifier(
+            self.featurizer.n_outputs,
+            num_classes,
+            self.hparams['nonlinear_classifier'])
+        self.num_domains = num_domains
+        self.num_classes = num_classes
+        self.u_count = 0
+        self.network = nn.Sequential(self.featurizer, self.classifier)
+        self.optimizer = torch.optim.Adam(
+            self.network.parameters(),
+            lr=self.hparams["lr"],
+            weight_decay=self.hparams['weight_decay']
+        )
+        self.optimizer_specific_state = [None] * num_domains
+
+    def create_clone(self, device, n_domain):
+        self.network_specific = []
+        self.optimizer_specific = []
+        for i_domain in range(n_domain):
+            self.network_specific.append(self.network)
+            self.optimizer_specific.append(torch.optim.Adam(
+                self.network_specific[i_domain].parameters(),
+                lr=self.hparams["lr"],
+                weight_decay=self.hparams['weight_decay']
+            ))
+            if self.optimizer_specific_state[i_domain] is not None:
+                self.optimizer_specific[i_domain].load_state_dict(self.optimizer_specific_state[i_domain])
+
+    def update(self, minibatches, unlabeled=None):
+        # Domain-wise
+        if (self.u_count % 10) == 0:
+            self.model_trajectory = copy.deepcopy(self.network)
+        self.create_clone(minibatches[0][0].device, self.num_domains)
+        model_origin = copy.deepcopy(self.network)
+        for i_domain, (x, y) in enumerate(minibatches):
+            loss = F.cross_entropy(self.network_specific[i_domain](x), y)
+            self.optimizer_specific[i_domain].zero_grad()
+            loss.backward()
+            self.optimizer_specific[i_domain].step()
+            self.optimizer_specific_state[i_domain] = self.optimizer_specific[i_domain].state_dict()
+
+        all_x = torch.cat([x for x, y in minibatches])
+        all_y = torch.cat([y for x, y in minibatches])
+        loss = F.cross_entropy(self.predict(all_x), all_y)
+
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+
+        result_dict = {'loss': loss.item()}
+
+        diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
+        domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
+
+        angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in
+                 range(self.num_domains)]
+        domain_angle_dict = {f"angle_{i}": value for i, value in enumerate(angle)}
+
+        invariant_angle = self.cos_sim(self.network, self.model_trajectory, model_origin)
+        invariant_dict = {f"invariant angle": invariant_angle}
+
+        grad_norm = self.diff_weight(model_origin, self.network)
+        grad_norm_dict = {f"grad_progress": grad_norm}
+
+        self.u_count += 1
+        result_dict.update(domain_diff_dict)
+        result_dict.update(domain_angle_dict)
+        result_dict.update(invariant_dict)
+        result_dict.update(grad_norm_dict)
+        return result_dict
+
+    def predict(self, x):
+        return self.network(x)
 
 class Fish_T(Algorithm):
     """
@@ -264,30 +353,48 @@ class Fishr_T(Algorithm):
         # assert backpack is not None, "Install backpack with: 'pip install backpack-for-pytorch==1.3.0'"
         super(Fishr_T, self).__init__(input_shape, num_classes, num_domains, hparams)
         self.num_domains = num_domains
+        self.num_classes = num_classes
+        self.u_count = 0
 
         self.featurizer = networks.Featurizer(input_shape, self.hparams)
-        # self.classifier = extend(
-        #     networks.Classifier(
-        #         self.featurizer.n_outputs,
-        #         num_classes,
-        #         self.hparams['nonlinear_classifier'],
-        #     )
-        # )
-        self.classifier = networks.Classifier(
-            self.featurizer.n_outputs,
-            num_classes,
-            self.hparams['nonlinear_classifier'],
+        self.classifier = extend(
+            networks.Classifier(
+                self.featurizer.n_outputs,
+                num_classes,
+                self.hparams['nonlinear_classifier'],
+            )
         )
+
         self.network = nn.Sequential(self.featurizer, self.classifier)
 
         self.register_buffer("update_count", torch.tensor([0]))
-        # self.bce_extended = extend(nn.CrossEntropyLoss(reduction='none'))
-        self.bce_extended = nn.CrossEntropyLoss(reduction='none')
+        self.bce_extended = extend(nn.CrossEntropyLoss(reduction='none'))
         self.ema_per_domain = [
             MovingAverage(ema=self.hparams["ema"], oneminusema_correction=True)
             for _ in range(self.num_domains)
         ]
         self._init_optimizer()
+
+        self.model_trajectory = copy.deepcopy(self.network)
+        self.optimizer = torch.optim.Adam(
+            self.network.parameters(),
+            lr=self.hparams["lr"],
+            weight_decay=self.hparams['weight_decay']
+        )
+        self.optimizer_specific_state = [None] * num_domains
+
+    def create_clone(self, device, n_domain):
+        self.network_specific = []
+        self.optimizer_specific = []
+        for i_domain in range(n_domain):
+            self.network_specific.append(self.network)
+            self.optimizer_specific.append(torch.optim.Adam(
+                self.network_specific[i_domain].parameters(),
+                lr=self.hparams["lr"],
+                weight_decay=self.hparams['weight_decay']
+            ))
+            if self.optimizer_specific_state[i_domain] is not None:
+                self.optimizer_specific[i_domain].load_state_dict(self.optimizer_specific_state[i_domain])
 
     def _init_optimizer(self):
         self.optimizer = torch.optim.Adam(
@@ -297,6 +404,19 @@ class Fishr_T(Algorithm):
         )
 
     def update(self, minibatches, unlabeled=None):
+        # Domain-wise
+        if (self.u_count % 10) == 0:
+            self.model_trajectory = copy.deepcopy(self.network)
+        self.create_clone(minibatches[0][0].device, self.num_domains)
+        model_origin = copy.deepcopy(self.network)
+        for i_domain, (x, y) in enumerate(minibatches):
+            loss = F.cross_entropy(self.network_specific[i_domain](x), y)
+            self.optimizer_specific[i_domain].zero_grad()
+            loss.backward()
+            self.optimizer_specific[i_domain].step()
+            self.optimizer_specific_state[i_domain] = self.optimizer_specific[i_domain].state_dict()
+
+        # Fishr
         assert len(minibatches) == self.num_domains
         all_x = torch.cat([x for x, y in minibatches])
         all_y = torch.cat([y for x, y in minibatches])
@@ -321,8 +441,30 @@ class Fishr_T(Algorithm):
         self.optimizer.zero_grad()
         objective.backward()
         self.optimizer.step()
+        result_dict = {'loss': objective.item(), 'nll': all_nll.item(), 'penalty': penalty.item()}
 
-        return {'loss': objective.item(), 'nll': all_nll.item(), 'penalty': penalty.item()}
+        print("diff: domain - network")
+        diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
+        domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
+
+        print("angle: origin - domain - network")
+        angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
+        domain_angle_dict = {f"angle_{i}": value for i, value in enumerate(angle)}
+
+        print("angle: network - trajectory - origin")
+        invariant_angle = self.cos_sim(self.network, self.model_trajectory, model_origin)
+        invariant_dict = {f"invariant angle": invariant_angle}
+
+        print("norm: origin - network")
+        grad_norm = self.diff_weight(model_origin, self.network)
+        grad_norm_dict = {f"grad_progress": grad_norm}
+
+        self.u_count += 1
+        result_dict.update(domain_diff_dict)
+        result_dict.update(domain_angle_dict)
+        result_dict.update(invariant_dict)
+        result_dict.update(grad_norm_dict)
+        return result_dict
 
     def compute_fishr_penalty(self, all_logits, all_y, len_minibatches):
         dict_grads = self._get_grads(all_logits, all_y)
@@ -336,9 +478,10 @@ class Fishr_T(Algorithm):
             loss.backward(
                 inputs=list(self.classifier.parameters()), retain_graph=True, create_graph=True
             )
-        loss.backward(
-            inputs=list(self.classifier.parameters()), retain_graph=True, create_graph=True
-        )
+
+        for name, weights in self.classifier.named_parameters():
+            print(weights.grad_batch)
+
         # compute individual grads for all samples across all domains simultaneously
         dict_grads = OrderedDict(
             [
@@ -1769,28 +1912,22 @@ class Fishr(Algorithm):
     "Invariant Gradients variances for Out-of-distribution Generalization"
 
     def __init__(self, input_shape, num_classes, num_domains, hparams):
-        # assert backpack is not None, "Install backpack with: 'pip install backpack-for-pytorch==1.3.0'"
+        assert backpack is not None, "Install backpack with: 'pip install backpack-for-pytorch==1.3.0'"
         super(Fishr, self).__init__(input_shape, num_classes, num_domains, hparams)
         self.num_domains = num_domains
 
         self.featurizer = networks.Featurizer(input_shape, self.hparams)
-        # self.classifier = extend(
-        #     networks.Classifier(
-        #         self.featurizer.n_outputs,
-        #         num_classes,
-        #         self.hparams['nonlinear_classifier'],
-        #     )
-        # )
-        self.classifier = networks.Classifier(
-            self.featurizer.n_outputs,
-            num_classes,
-            self.hparams['nonlinear_classifier'],
+        self.classifier = extend(
+            networks.Classifier(
+                self.featurizer.n_outputs,
+                num_classes,
+                self.hparams['nonlinear_classifier'],
+            )
         )
         self.network = nn.Sequential(self.featurizer, self.classifier)
 
         self.register_buffer("update_count", torch.tensor([0]))
-        # self.bce_extended = extend(nn.CrossEntropyLoss(reduction='none'))
-        self.bce_extended = nn.CrossEntropyLoss(reduction='none')
+        self.bce_extended = extend(nn.CrossEntropyLoss(reduction='none'))
         self.ema_per_domain = [
             MovingAverage(ema=self.hparams["ema"], oneminusema_correction=True)
             for _ in range(self.num_domains)
@@ -1844,9 +1981,7 @@ class Fishr(Algorithm):
             loss.backward(
                 inputs=list(self.classifier.parameters()), retain_graph=True, create_graph=True
             )
-        loss.backward(
-            inputs=list(self.classifier.parameters()), retain_graph=True, create_graph=True
-        )
+
         # compute individual grads for all samples across all domains simultaneously
         dict_grads = OrderedDict(
             [
@@ -1902,6 +2037,7 @@ class Fishr(Algorithm):
 
     def predict(self, x):
         return self.network(x)
+
 
 
 class TRM(Algorithm):

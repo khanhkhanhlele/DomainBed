@@ -57,3 +57,23 @@ save_directory = "/home/duong/Documents/git/DomainGeneralization/KhanhLe/DomainB
 
 new_size = (64, 64)
 resize_images_in_folder(folder_path, save_directory, new_size)
+
+
+def create_clone(self, device, n_domain):
+    self.network_specific = []
+    self.optimizer_specific = []
+    for i_domain in range(n_domain):
+        self.network_specific.append(nn.Sequential(networks.Featurizer(self.input_shape, self.hparams),
+                                                   networks.Classifier(
+                                                       self.featurizer.n_outputs,
+                                                       self.num_classes,
+                                                       self.hparams['nonlinear_classifier']
+                                                   )).to(device))
+        self.network_specific[i_domain].load_state_dict(copy.deepcopy(self.network.state_dict()))
+        self.optimizer_specific.append(torch.optim.Adam(
+            self.network_specific[i_domain].parameters(),
+            lr=self.hparams["lr"],
+            weight_decay=self.hparams['weight_decay']
+        ))
+        if self.optimizer_specific_state[i_domain] is not None:
+            self.optimizer_specific[i_domain].load_state_dict(self.optimizer_specific_state[i_domain])

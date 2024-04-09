@@ -207,6 +207,7 @@ class ERM_T(Algorithm):
                                                            self.num_classes,
                                                            self.hparams['nonlinear_classifier']
                                                        )).to(device))
+            self.network_specific[i_domain].load_state_dict(copy.deepcopy(self.network.state_dict()))
             self.optimizer_specific.append(torch.optim.Adam(
                 self.network_specific[i_domain].parameters(),
                 lr=self.hparams["lr"],

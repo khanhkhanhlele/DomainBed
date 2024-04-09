@@ -118,9 +118,11 @@ class Algorithm(torch.nn.Module):
 
         grad1 = params1 - prev_param
         grad2 = params2 - prev_param
-
+        # print(f"prev:{torch.norm(prev_param)}|p1:{torch.norm(params1)}|p2:{torch.norm(params2)}")
+        # print(f"g1:{torch.norm(grad1)}|g2:{torch.norm(grad2)}")
         cos_sim = torch.dot(grad1, grad2) / (torch.norm(grad1) * torch.norm(grad2))
         return cos_sim.item()
+
 
 class ERM(Algorithm):
     """
@@ -157,6 +159,7 @@ class ERM(Algorithm):
     def predict(self, x):
         return self.network(x)
 
+
 class ERM_T(Algorithm):
     """
     Empirical Risk Minimization (ERM)
@@ -164,16 +167,29 @@ class ERM_T(Algorithm):
 
     def __init__(self, input_shape, num_classes, num_domains, hparams):
         super(ERM_T, self).__init__(input_shape, num_classes, num_domains,
-                                  hparams)
+                                    hparams)
         self.featurizer = networks.Featurizer(input_shape, self.hparams)
         self.classifier = networks.Classifier(
             self.featurizer.n_outputs,
             num_classes,
             self.hparams['nonlinear_classifier'])
+        self.featurizer1 = networks.Featurizer(input_shape, self.hparams)
+        self.classifier1 = networks.Classifier(
+            self.featurizer.n_outputs,
+            num_classes,
+            self.hparams['nonlinear_classifier'])
+        self.featurizer2 = networks.Featurizer(input_shape, self.hparams)
+        self.classifier2 = networks.Classifier(
+            self.featurizer.n_outputs,
+            num_classes,
+            self.hparams['nonlinear_classifier'])
         self.num_domains = num_domains
         self.num_classes = num_classes
+        self.input_shape = input_shape
         self.u_count = 0
         self.network = nn.Sequential(self.featurizer, self.classifier)
+        self.model_trajectory = nn.Sequential(self.featurizer1, self.classifier1)
+        self.model_origin = nn.Sequential(self.featurizer2, self.classifier2)
         self.optimizer = torch.optim.Adam(
             self.network.parameters(),
             lr=self.hparams["lr"],
@@ -185,7 +201,12 @@ class ERM_T(Algorithm):
         self.network_specific = []
         self.optimizer_specific = []
         for i_domain in range(n_domain):
-            self.network_specific.append(self.network)
+            self.network_specific.append(nn.Sequential(networks.Featurizer(self.input_shape, self.hparams),
+                                                       networks.Classifier(
+                                                           self.featurizer.n_outputs,
+                                                           self.num_classes,
+                                                           self.hparams['nonlinear_classifier']
+                                                       )).to(device))
             self.optimizer_specific.append(torch.optim.Adam(
                 self.network_specific[i_domain].parameters(),
                 lr=self.hparams["lr"],
@@ -197,9 +218,9 @@ class ERM_T(Algorithm):
     def update(self, minibatches, unlabeled=None):
         # Domain-wise
         if (self.u_count % 10) == 0:
-            self.model_trajectory = copy.deepcopy(self.network)
+            self.model_trajectory.load_state_dict(copy.deepcopy(self.network.state_dict()))
         self.create_clone(minibatches[0][0].device, self.num_domains)
-        model_origin = copy.deepcopy(self.network)
+        self.model_origin.load_state_dict(copy.deepcopy(self.network.state_dict()))
         for i_domain, (x, y) in enumerate(minibatches):
             loss = F.cross_entropy(self.network_specific[i_domain](x), y)
             self.optimizer_specific[i_domain].zero_grad()
@@ -220,14 +241,14 @@ class ERM_T(Algorithm):
         diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
 
-        angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in
+        angle = [self.cos_sim(self.model_origin, self.network_specific[i_domain], self.network) for i_domain in
                  range(self.num_domains)]
         domain_angle_dict = {f"angle_{i}": value for i, value in enumerate(angle)}
 
-        invariant_angle = self.cos_sim(self.network, self.model_trajectory, model_origin)
+        invariant_angle = self.cos_sim(self.network, self.model_trajectory, self.model_origin)
         invariant_dict = {f"invariant angle": invariant_angle}
 
-        grad_norm = self.diff_weight(model_origin, self.network)
+        grad_norm = self.diff_weight(self.model_origin, self.network)
         grad_norm_dict = {f"grad_progress": grad_norm}
 
         self.u_count += 1
@@ -239,6 +260,7 @@ class ERM_T(Algorithm):
 
     def predict(self, x):
         return self.network(x)
+
 
 class Fish_T(Algorithm):
     """
@@ -320,13 +342,12 @@ class Fish_T(Algorithm):
 
         diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
-
-        angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
+        angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in
+                 range(self.num_domains)]
         domain_angle_dict = {f"angle_{i}": value for i, value in enumerate(angle)}
 
         # Then, define the existing dictionary
         result_dict = {'loss': loss.item()}
-
         invariant_angle = self.cos_sim(self.network, self.model_trajectory, model_origin)
         invariant_dict = {f"invariant angle": invariant_angle}
         grad_norm = self.diff_weight(model_origin, self.network)
@@ -448,7 +469,8 @@ class Fishr_T(Algorithm):
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
 
         print("angle: origin - domain - network")
-        angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
+        angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in
+                 range(self.num_domains)]
         domain_angle_dict = {f"angle_{i}": value for i, value in enumerate(angle)}
 
         print("angle: network - trajectory - origin")
@@ -2037,7 +2059,6 @@ class Fishr(Algorithm):
 
     def predict(self, x):
         return self.network(x)
-
 
 
 class TRM(Algorithm):

@@ -2,8 +2,10 @@ __pycache__
 domainbed/facebook.py
 
 domainbed/data/*
+domainbed/results/*
 train_output/*
 wandb/*
 collect_wandb/*
 
+MnistTest/*
 .env

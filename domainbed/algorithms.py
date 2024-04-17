@@ -478,7 +478,7 @@ class CAG_T(Algorithm):
 
         if (self.u_count % self.cag_update) == 0:
             self.create_clone(minibatches[0][0].device, n_domain=self.num_domains)
-            self.model_origin = copy.deepcopy(self.network)
+
 
         for i_domain, (x, y) in enumerate(minibatches):
             loss = F.cross_entropy(self.network_inner[i_domain](x), y)
@@ -489,6 +489,7 @@ class CAG_T(Algorithm):
 
         # After certain rounds, we cag once
         if (self.u_count % self.cag_update) == (self.cag_update - 1):
+            self.model_buffer = copy.deepcopy(self.network)
             meta_weights = self.cag(
                 meta_weights=self.network,
                 inner_weights=self.network_inner,
@@ -515,6 +516,8 @@ class CAG_T(Algorithm):
         grad_norm = self.diff_weight(self.model_origin, self.network)
         grad_norm_dict = {f"grad_progress": grad_norm}
 
+        if (self.u_count % self.cag_update) == (self.cag_update - 1):
+            self.model_origin = copy.deepcopy(self.model_buffer)
         # print(domain_diff_dict)
         # print(grad_norm_dict)
 

@@ -238,7 +238,7 @@ if __name__ == "__main__":
             }
 
             for key, val in checkpoint_vals.items():
-                results[key] = np.mean(val)
+                results[key] = np.nanmean(val)
 
             evals = zip(eval_loader_names, eval_loaders, eval_weights)
             for name, loader, weights in evals:

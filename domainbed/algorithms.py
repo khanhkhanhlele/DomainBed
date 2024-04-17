@@ -380,6 +380,8 @@ class CAG_T(Algorithm):
         self.num_classes = num_classes
         self.num_domains = num_domains
         self.network = networks.WholeFish(input_shape, num_classes, hparams)
+        self.erm_network = networks.WholeFish(input_shape, num_classes, hparams,
+                                                weights=self.network.state_dict())
         self.model_trajectory = copy.deepcopy(self.network)
         self.model_origin = copy.deepcopy(self.network)
         self.optimizer = torch.optim.Adam(
@@ -387,7 +389,13 @@ class CAG_T(Algorithm):
             lr=self.hparams["lr"],
             weight_decay=self.hparams['weight_decay']
         )
+        self.erm_optimizer = torch.optim.Adam(
+            self.erm_network.parameters(),
+            lr=self.hparams["lr"],
+            weight_decay=self.hparams['weight_decay']
+        )
         self.optimizer_inner_state = [None] * num_domains
+        self.erm_optimizer_state = None
         self.cag_update = self.hparams['cag_update']
         self.u_count = 0
         self.grad = torch.zeros(num_domains, sum(p.numel() for p in self.network.parameters()))
@@ -410,6 +418,10 @@ class CAG_T(Algorithm):
             ))
             if self.optimizer_inner_state[i_domain] is not None:
                 self.optimizer_inner[i_domain].load_state_dict(self.optimizer_inner_state[i_domain])
+        if self.erm_optimizer_state is not None:
+            self.erm_optimizer.load_state_dict(self.erm_optimizer_state)
+        self.erm_network.load_state_dict(copy.deepcopy(self.network.state_dict()))
+
 
     def cag(self, meta_weights, inner_weights, lr_meta):
         all_domain_grads = []
@@ -431,17 +443,95 @@ class CAG_T(Algorithm):
 
         return meta_weights
 
+    def pogm_high(self, erm_weights, meta_weights, inner_weights, lr_meta):
+        all_domain_grads = []
+        flatten_meta_weights = torch.cat([param.view(-1) for param in meta_weights.parameters()])
+        # Domain-specific Grad
+        for i_domain in range(self.num_domains):
+            domain_grad_diffs = [torch.flatten(inner_param - meta_param) for inner_param, meta_param in
+                                 zip(inner_weights[i_domain].parameters(), meta_weights.parameters())]
+            domain_grad_vector = torch.cat(domain_grad_diffs)
+            all_domain_grads.append(domain_grad_vector)
+
+        # ERM Grad
+        grad_erm = []
+        erm_grad_diffs = [torch.flatten(inner_param - meta_param) for inner_param, meta_param in
+                             zip(erm_weights.parameters(), meta_weights.parameters())]
+        erm_grad_vector = torch.cat(erm_grad_diffs)
+        grad_erm.append(erm_grad_vector)
+
+        erm_grad_tensor = torch.stack(grad_erm)
+        all_domains_grad_tensor = torch.stack(all_domain_grads)
+        # print(all_domains_grad_tensor)
+        pogm_grad = self.pogm(erm_grad_tensor, all_domains_grad_tensor, self.num_domains)
+
+        flatten_meta_weights += pogm_grad * lr_meta
+
+        vector_to_parameters(flatten_meta_weights, meta_weights.parameters())
+        meta_weights = ParamDict(meta_weights.state_dict())
+
+        return meta_weights
+
+    def pogm(self, grad_erm, grad_vec, num_tasks):
+        """
+        grad_vec: [num_domains, dim]
+        grad_erm: [1, dim]
+        """
+        grads = grad_vec
+
+        GG = grads.mm(grads.t()).cpu()                          # [num_domains, num_domains]
+        scale = (torch.diag(GG) + 1e-4).sqrt().mean()
+        GG = GG / scale.pow(2)                                  # [num_domains, num_domains]
+        # Gg = GG.mean(1, keepdims=True)                          # [num_domains, 1]
+        # gg = Gg.mean(0, keepdims=True)                          # [1, 1]
+
+        gErm = grads.mm(grad_erm.t()).cpu()/scale.pow(2)        # [num_domains, 1] ~~ exchange Gg
+        EErm = grad_erm.mm(grad_erm.t()).cpu()/scale.pow(2)     # [num_domains, 1] ~~ exchange gg
+
+        w = torch.zeros(num_tasks, 1, requires_grad=True)
+        if num_tasks == 50:
+            w_opt = torch.optim.SGD([w], lr=50, momentum=0.5)
+        else:
+            w_opt = torch.optim.SGD([w], lr=25, momentum=0.5)
+
+        c = (EErm + 1e-4).sqrt() * self.cagrad_c
+
+        w_best = None
+        obj_best = np.inf
+        for i in range(21):
+            w_opt.zero_grad()
+            ww = torch.softmax(w, 0)
+            obj = ww.t().mm(gErm) + c * (ww.t().mm(GG).mm(ww) + 1e-4).sqrt()
+            if obj.item() < obj_best:
+                obj_best = obj.item()
+                w_best = w.clone()
+            if i < 20:
+                obj.backward(retain_graph=True)
+                w_opt.step()
+
+        ww = torch.softmax(w_best, 0)
+        gw_norm = (ww.t().mm(GG).mm(ww) + 1e-4).sqrt()
+
+        lmbda = c.view(-1) / (gw_norm + 1e-4)
+        g = ((1 / num_tasks + ww * lmbda).view(
+            -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)
+        return g
+
     def cagrad(self, grad_vec, num_tasks):
         """
         grad_vec: [num_tasks, dim]
         """
         grads = grad_vec
-
+        print(grads.size())
         GG = grads.mm(grads.t()).cpu()
         scale = (torch.diag(GG) + 1e-4).sqrt().mean()
         GG = GG / scale.pow(2)
         Gg = GG.mean(1, keepdims=True)
         gg = Gg.mean(0, keepdims=True)
+
+        print(GG.size())
+        print(Gg.size())
+        print(gg.size())
 
         w = torch.zeros(num_tasks, 1, requires_grad=True)
         if num_tasks == 50:
@@ -479,7 +569,7 @@ class CAG_T(Algorithm):
         if (self.u_count % self.cag_update) == 0:
             self.create_clone(minibatches[0][0].device, n_domain=self.num_domains)
 
-
+        # Domain-specific Trainer
         for i_domain, (x, y) in enumerate(minibatches):
             loss = F.cross_entropy(self.network_inner[i_domain](x), y)
             self.optimizer_inner[i_domain].zero_grad()
@@ -487,10 +577,24 @@ class CAG_T(Algorithm):
             self.optimizer_inner[i_domain].step()
             self.optimizer_inner_state[i_domain] = self.optimizer_inner[i_domain].state_dict()
 
+        all_x = torch.cat([x for x, y in minibatches])
+        all_y = torch.cat([y for x, y in minibatches])
+        erm_loss = F.cross_entropy(self.erm_network(all_x), all_y)
+        self.erm_optimizer.zero_grad()
+        erm_loss.backward()
+        self.erm_optimizer.step()
+        self.erm_optimizer_state = self.erm_optimizer.state_dict()
+
         # After certain rounds, we cag once
         if (self.u_count % self.cag_update) == (self.cag_update - 1):
             self.model_buffer = copy.deepcopy(self.network)
-            meta_weights = self.cag(
+            # meta_weights = self.cag(
+            #     meta_weights=self.network,
+            #     inner_weights=self.network_inner,
+            #     lr_meta=self.hparams["meta_lr"]
+            # )
+            meta_weights = self.pogm_high(
+                erm_weights=self.erm_network,
                 meta_weights=self.network,
                 inner_weights=self.network_inner,
                 lr_meta=self.hparams["meta_lr"]

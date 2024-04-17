@@ -376,6 +376,7 @@ class Fishr_T(Algorithm):
         super(Fishr_T, self).__init__(input_shape, num_classes, num_domains, hparams)
         self.num_domains = num_domains
         self.num_classes = num_classes
+        self.input_shape = input_shape
         self.u_count = 0
 
         self.featurizer = networks.Featurizer(input_shape, self.hparams)
@@ -386,8 +387,20 @@ class Fishr_T(Algorithm):
                 self.hparams['nonlinear_classifier'],
             )
         )
+        self.featurizer1 = networks.Featurizer(input_shape, self.hparams)
+        self.classifier1 = networks.Classifier(
+            self.featurizer.n_outputs,
+            num_classes,
+            self.hparams['nonlinear_classifier'])
+        self.featurizer2 = networks.Featurizer(input_shape, self.hparams)
+        self.classifier2 = networks.Classifier(
+            self.featurizer.n_outputs,
+            num_classes,
+            self.hparams['nonlinear_classifier'])
 
         self.network = nn.Sequential(self.featurizer, self.classifier)
+        self.model_trajectory = nn.Sequential(self.featurizer1, self.classifier1)
+        self.model_origin = nn.Sequential(self.featurizer2, self.classifier2)
 
         self.register_buffer("update_count", torch.tensor([0]))
         self.bce_extended = extend(nn.CrossEntropyLoss(reduction='none'))
@@ -397,7 +410,6 @@ class Fishr_T(Algorithm):
         ]
         self._init_optimizer()
 
-        self.model_trajectory = copy.deepcopy(self.network)
         self.optimizer = torch.optim.Adam(
             self.network.parameters(),
             lr=self.hparams["lr"],
@@ -409,7 +421,13 @@ class Fishr_T(Algorithm):
         self.network_specific = []
         self.optimizer_specific = []
         for i_domain in range(n_domain):
-            self.network_specific.append(self.network)
+            self.network_specific.append(nn.Sequential(networks.Featurizer(self.input_shape, self.hparams),
+                                                       networks.Classifier(
+                                                           self.featurizer.n_outputs,
+                                                           self.num_classes,
+                                                           self.hparams['nonlinear_classifier']
+                                                       )).to(device))
+            self.network_specific[i_domain].load_state_dict(copy.deepcopy(self.network.state_dict()))
             self.optimizer_specific.append(torch.optim.Adam(
                 self.network_specific[i_domain].parameters(),
                 lr=self.hparams["lr"],
@@ -428,9 +446,9 @@ class Fishr_T(Algorithm):
     def update(self, minibatches, unlabeled=None):
         # Domain-wise
         if (self.u_count % 10) == 0:
-            self.model_trajectory = copy.deepcopy(self.network)
+            self.model_trajectory.load_state_dict(copy.deepcopy(self.network.state_dict()))
         self.create_clone(minibatches[0][0].device, self.num_domains)
-        model_origin = copy.deepcopy(self.network)
+        self.model_origin.load_state_dict(copy.deepcopy(self.network.state_dict()))
         for i_domain, (x, y) in enumerate(minibatches):
             loss = F.cross_entropy(self.network_specific[i_domain](x), y)
             self.optimizer_specific[i_domain].zero_grad()
@@ -465,21 +483,17 @@ class Fishr_T(Algorithm):
         self.optimizer.step()
         result_dict = {'loss': objective.item(), 'nll': all_nll.item(), 'penalty': penalty.item()}
 
-        print("diff: domain - network")
         diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
 
-        print("angle: origin - domain - network")
-        angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in
+        angle = [self.cos_sim(self.model_origin, self.network_specific[i_domain], self.network) for i_domain in
                  range(self.num_domains)]
         domain_angle_dict = {f"angle_{i}": value for i, value in enumerate(angle)}
 
-        print("angle: network - trajectory - origin")
-        invariant_angle = self.cos_sim(self.network, self.model_trajectory, model_origin)
+        invariant_angle = self.cos_sim(self.network, self.model_trajectory, self.model_origin)
         invariant_dict = {f"invariant angle": invariant_angle}
 
-        print("norm: origin - network")
-        grad_norm = self.diff_weight(model_origin, self.network)
+        grad_norm = self.diff_weight(self.model_origin, self.network)
         grad_norm_dict = {f"grad_progress": grad_norm}
 
         self.u_count += 1
@@ -499,11 +513,9 @@ class Fishr_T(Algorithm):
         loss = self.bce_extended(logits, y).sum()
         with backpack(BatchGrad()):
             loss.backward(
-                inputs=list(self.classifier.parameters()), retain_graph=True, create_graph=True
+                # inputs=list(self.classifier.parameters()), retain_graph=True, create_graph=True
+                retain_graph=True, create_graph=True
             )
-
-        for name, weights in self.classifier.named_parameters():
-            print(weights.grad_batch)
 
         # compute individual grads for all samples across all domains simultaneously
         dict_grads = OrderedDict(
@@ -648,10 +660,6 @@ class CAG(Algorithm):
         self.network_inner = []
         self.optimizer_inner = []
         for i_domain in range(n_domain):
-            # We only want to load with network.state_dict() when CAG is applied.
-            # Otherwise, we set the weights with self.network_inner_state[i_domain].state_dict (these state_dict
-            # is saved every round)
-            # Or i think, we synchronize with network_inner_state.state_dict
             self.network_inner.append(networks.WholeFish(self.input_shape, self.num_classes, self.hparams,
                                                          weights=self.network.state_dict()).to(device))
             self.optimizer_inner.append(torch.optim.Adam(
@@ -663,39 +671,23 @@ class CAG(Algorithm):
                 self.optimizer_inner[i_domain].load_state_dict(self.optimizer_inner_state[i_domain])
 
     def cag(self, meta_weights, inner_weights, lr_meta):
-
-        # Lấy tất cả parameter names
-        param_names = [name for name, _ in meta_weights.named_parameters()]
-
-        # Tính toán gradient chênh lệch cho mỗi domain
-        domain_grad_diffs = []
+        all_domain_grads = []
+        flatten_meta_weights = torch.cat([param.view(-1) for param in meta_weights.parameters()])
         for i_domain in range(self.num_domains):
-            # Tạo một list chứa gradient chênh lệch hoặc vector 0 tương ứng với mỗi parameter
-            domain_grads = []
-            for (clone_param, meta_param, name) in zip(inner_weights[i_domain].parameters(), meta_weights.parameters(),
-                                                       param_names):
-                if name.startswith('net.1'):
-                    # Tính gradient chênh lệch cho tầng Classifier
-                    domain_grads.append(torch.flatten(clone_param - meta_param))
-                else:
-                    # Tạo vector 0 cho tầng Featurizer
-                    domain_grads.append(torch.zeros_like(torch.flatten(meta_param)))
-            # Nối và thêm vào list tổng
-            domain_grad_diffs.append(torch.cat(domain_grads))
+            domain_grad_diffs = [torch.flatten(inner_param - meta_param) for inner_param, meta_param in
+                                 zip(inner_weights[i_domain].parameters(), meta_weights.parameters())]
+            domain_grad_vector = torch.cat(domain_grad_diffs)
+            all_domain_grads.append(domain_grad_vector)
 
-        all_domains_grad_tensor = torch.stack(domain_grad_diffs)
-        # print(all_domains_grad_tensor)
+        all_domains_grad_tensor = torch.stack(all_domain_grads)
+
         cagrad = self.cagrad(all_domains_grad_tensor, self.num_domains)
-        # print(cagrad)
 
-        # Cập nhật trọng số meta
-        meta_weights_vector = parameters_to_vector(meta_weights.parameters())
-        vector_to_parameters(meta_weights_vector + cagrad * lr_meta, meta_weights.parameters())
+        flatten_meta_weights += cagrad * lr_meta
 
-        # Tạo và in ra ParamDict mới từ trạng thái cập nhật của meta_weights
-        updated_meta_weights = ParamDict(meta_weights.state_dict())
-
-        return updated_meta_weights
+        vector_to_parameters(flatten_meta_weights, meta_weights.parameters())
+        meta_weights = ParamDict(meta_weights.state_dict())
+        return meta_weights
 
     def cagrad(self, grad_vec, num_tasks):
         """
@@ -754,7 +746,7 @@ class CAG(Algorithm):
             loss.backward()
             self.optimizer.step()
 
-            # After certain rounds, we cag once
+        # After certain rounds, we cag once
         if (self.u_count % self.cag_update) == (self.cag_update - 1):
             meta_weights = self.cag(
                 meta_weights=self.network,

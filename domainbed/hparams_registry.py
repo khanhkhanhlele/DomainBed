@@ -122,7 +122,7 @@ def _hparams(algorithm, dataset, random_seed):
         _hparam('k', 1e+1, lambda r: 10**r.uniform(-3, 5))
 
     elif algorithm == "Fishr" or algorithm == "Fishr_T":
-        _hparam('lambda', 1000., lambda r: 10**r.uniform(1., 4.))
+        _hparam('lambda', 2500., lambda r: 10**r.uniform(1., 4.))  # 1000
         _hparam('penalty_anneal_iters', 1500, lambda r: int(r.uniform(0., 5000.)))
         _hparam('ema', 0.95, lambda r: r.uniform(0.90, 0.99))
 

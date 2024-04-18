@@ -513,7 +513,7 @@ class CAG_T(Algorithm):
         gw_norm = (ww.t().mm(GG).mm(ww) + 1e-4).sqrt()
 
         lmbda = c.view(-1) / (gw_norm + 1e-4)
-        g = grad_erm + ((ww * lmbda).view(
+        g = grad_erm.view(-1, 1).to(grads.device) + ((ww * lmbda).view(
             -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)
         # g = ((1 / num_tasks + ww * lmbda).view(
         #     -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)

@@ -400,6 +400,9 @@ class CAG_T(Algorithm):
         self.u_count = 0
         self.grad = torch.zeros(num_domains, sum(p.numel() for p in self.network.parameters()))
         self.cagrad_c = self.hparams['cagrad_c']
+        self.cagrad_lr = self.hparams['cag_lr']
+        self.cagrad_mom = self.hparams['cag_mom']
+        self.cagrad_step = self.hparams['cag_step']
 
     def create_clone(self, device, n_domain):
         self.network_inner = []
@@ -601,8 +604,6 @@ class CAG_T(Algorithm):
             )
             self.network.reset_weights(meta_weights)
 
-        self.u_count += 1
-
         diff = [self.diff_weight(self.network_inner[i_domain], self.network) for i_domain in range(self.num_domains)]
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
         if self.diff_weight(self.network_inner[i_domain], self.network) != 0:
@@ -622,8 +623,6 @@ class CAG_T(Algorithm):
 
         if (self.u_count % self.cag_update) == (self.cag_update - 1):
             self.model_origin = copy.deepcopy(self.model_buffer)
-        # print(domain_diff_dict)
-        # print(grad_norm_dict)
 
         self.u_count += 1
         result_dict.update(domain_diff_dict)

@@ -400,6 +400,9 @@ class CAG_T(Algorithm):
         self.u_count = 0
         self.grad = torch.zeros(num_domains, sum(p.numel() for p in self.network.parameters()))
         self.cagrad_c = self.hparams['cagrad_c']
+        self.cagrad_lr = self.hparams['cag_lr']
+        self.cagrad_mom = self.hparams['cag_mom']
+        self.cagrad_step = self.hparams['cag_step']
 
     def create_clone(self, device, n_domain):
         self.network_inner = []
@@ -488,17 +491,19 @@ class CAG_T(Algorithm):
         gErm = grads.mm(grad_erm.t()).cpu()/scale.pow(2)        # [num_domains, 1] ~~ exchange Gg
         EErm = grad_erm.mm(grad_erm.t()).cpu()/scale.pow(2)     # [num_domains, 1] ~~ exchange gg
 
+
         w = torch.zeros(num_tasks, 1, requires_grad=True)
         if num_tasks == 50:
             w_opt = torch.optim.SGD([w], lr=50, momentum=0.5)
         else:
-            w_opt = torch.optim.SGD([w], lr=25, momentum=0.5)
+            # w_opt = torch.optim.SGD([w], lr=25, momentum=0.5)
+            w_opt = torch.optim.SGD([w], lr=self.cagrad_lr, momentum=self.cagrad_mom)
 
         c = (EErm + 1e-4).sqrt() * self.cagrad_c
 
         w_best = None
         obj_best = np.inf
-        for i in range(21):
+        for i in range(self.cagrad_step):
             w_opt.zero_grad()
             ww = torch.softmax(w, 0)
             obj = ww.t().mm(gErm) + c * (ww.t().mm(GG).mm(ww) + 1e-4).sqrt()
@@ -513,8 +518,13 @@ class CAG_T(Algorithm):
         gw_norm = (ww.t().mm(GG).mm(ww) + 1e-4).sqrt()
 
         lmbda = c.view(-1) / (gw_norm + 1e-4)
-        g = grad_erm.view(-1, 1).to(grads.device) + ((ww * lmbda).view(
-            -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)
+        print(f"GERM: {gErm.size()} - EERM: {EErm.size()} - grad_erm: {grad_erm.view(-1, 1).to(grads.device).size()}")
+        print((((ww * lmbda).view(
+            -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)).view(-1, 1).size())
+        print("=========================================================")
+        print(grad_erm.size())
+        g = grad_erm.view(-1, 1).to(grads.device) + (((ww * lmbda).view(
+            -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)).view(-1, 1)
         # g = ((1 / num_tasks + ww * lmbda).view(
         #     -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)
         return g

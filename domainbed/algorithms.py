@@ -518,6 +518,9 @@ class CAG_T(Algorithm):
         lmbda = c.view(-1) / (gw_norm + 1e-4)
         g = ((1 / num_tasks + ww * lmbda).view(
             -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)
+
+        # print(f"grad_erm: {grad_erm.size()}| g: {g.size()}")
+
         return g
 
     def cagrad(self, grad_vec, num_tasks):

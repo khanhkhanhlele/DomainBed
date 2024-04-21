@@ -23,41 +23,42 @@ from domainbed.lib.misc import (
 from torch.nn.utils import vector_to_parameters, parameters_to_vector
 
 ALGORITHMS = [
-    'ERM',
-    'Fish',
-    'IRM',
-    'GroupDRO',
-    'Mixup',
-    'MLDG',
-    'CORAL',
-    'MMD',
-    'DANN',
-    'CDANN',
-    'MTL',
-    'SagNet',
-    'ARM',
-    'VREx',
-    'RSC',
-    'SD',
-    'ANDMask',
-    'SANDMask',
-    'IGA',
-    'SelfReg',
-    "Fishr",
-    'TRM',
-    'IB_ERM',
-    'IB_IRM',
-    'CAD',
-    'CondCAD',
-    'Transfer',
-    'CausIRL_CORAL',
-    'CausIRL_MMD',
-    'EQRM',
-    'CAG',  # CA Grad
-    'GradBase',
-    'CAG1',
-    'Fish_T',
-    'Fishr_T',
+    # 'ERM',
+    # 'Fish',
+    # 'IRM',
+    # 'GroupDRO',
+    # 'Mixup',
+    # 'MLDG',
+    # 'CORAL',
+    # 'MMD',
+    # 'DANN',
+    # 'CDANN',
+    # 'MTL',
+    # 'SagNet',
+    # 'ARM',
+    # 'VREx',
+    # 'RSC',
+    # 'SD',
+    # 'ANDMask',
+    # 'SANDMask',
+    # 'IGA',
+    # 'SelfReg',
+    # "Fishr",
+    # 'TRM',
+    # 'IB_ERM',
+    # 'IB_IRM',
+    # 'CAD',
+    # 'CondCAD',
+    # 'Transfer',
+    # 'CausIRL_CORAL',
+    # 'CausIRL_MMD',
+    # 'EQRM',
+    # 'CAG',  # CA Grad
+    'CAG_T',
+    # 'GradBase',
+    # 'CAG1',
+    # 'Fish_T',
+    # 'Fishr_T',
 ]
 
 
@@ -491,7 +492,6 @@ class CAG_T(Algorithm):
         gErm = grads.mm(grad_erm.t()).cpu()/scale.pow(2)        # [num_domains, 1] ~~ exchange Gg
         EErm = grad_erm.mm(grad_erm.t()).cpu()/scale.pow(2)     # [num_domains, 1] ~~ exchange gg
 
-
         w = torch.zeros(num_tasks, 1, requires_grad=True)
         if num_tasks == 50:
             w_opt = torch.optim.SGD([w], lr=50, momentum=0.5)
@@ -518,13 +518,10 @@ class CAG_T(Algorithm):
         gw_norm = (ww.t().mm(GG).mm(ww) + 1e-4).sqrt()
 
         lmbda = c.view(-1) / (gw_norm + 1e-4)
-        print(f"GERM: {gErm.size()} - EERM: {EErm.size()} - grad_erm: {grad_erm.view(-1, 1).to(grads.device).size()}")
-        print((((ww * lmbda).view(
-            -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)).view(-1, 1).size())
-        print("=========================================================")
-        print(grad_erm.size())
-        g = grad_erm.view(-1, 1).to(grads.device) + (((ww * lmbda).view(
-            -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)).view(-1, 1)
+        # print(grad_erm.sum(0).to(grads.device).size())
+
+        g = grad_erm.sum(0).to(grads.device) + (((ww * lmbda).view(
+            -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2))
         # g = ((1 / num_tasks + ww * lmbda).view(
         #     -1, 1).to(grads.device) * grads).sum(0) / (1 + self.cagrad_c ** 2)
         return g
@@ -612,8 +609,6 @@ class CAG_T(Algorithm):
                 lr_meta=self.hparams["meta_lr"]
             )
             self.network.reset_weights(meta_weights)
-
-        self.u_count += 1
 
         diff = [self.diff_weight(self.network_inner[i_domain], self.network) for i_domain in range(self.num_domains)]
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}

@@ -1,6 +1,6 @@
 # Official Implementation of Domain Generalization via Pareto Optimality Gradient Matching
 
-## Envinronment Setup
+## Environment Setup
 
 ## Data Setup
 

@@ -1,0 +1,1 @@
+python domainbed/scripts/collect_results_wandb.py

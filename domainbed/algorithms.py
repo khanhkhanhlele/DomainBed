@@ -1570,6 +1570,7 @@ class Fishr(Algorithm):
         loss = self.bce_extended(logits, y).sum()
         with backpack(BatchGrad()):
             loss.backward(
+                # inputs=list(self.classifier.parameters()), retain_graph=True, create_graph=True
                 retain_graph=True, create_graph=True
             )
 

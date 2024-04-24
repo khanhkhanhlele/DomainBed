@@ -96,9 +96,18 @@ def all_test_env_combinations(n):
         for j in range(i+1, n):
             yield [i, j]
 
+def split_json(input_str):
+    data = json.loads(input_str.replace("'", '"'))
+    result = []
+    for key, values in data.items():
+        for value in values:
+            result.append(json.dumps({key: value}))
+    
+    return result
 def make_args_list(n_trials, dataset_names, algorithms, n_hparams_from, n_hparams, steps,
-    data_dir, task, holdout_fraction, single_test_envs, wandb, hparams, wandb_project, wandb_entity):
+    data_dir, task, holdout_fraction, single_test_envs, wandb, hparams, wandb_project, wandb_entity,ablation):
     args_list = []
+    ablation_list = split_json(ablation) if ablation is not None else [1]
     for trial_seed in range(n_trials):
         for dataset in dataset_names:
             for algorithm in algorithms:
@@ -110,26 +119,28 @@ def make_args_list(n_trials, dataset_names, algorithms, n_hparams_from, n_hparam
                         datasets.num_environments(dataset))
                 for test_envs in all_test_envs:
                     for hparams_seed in range(n_hparams_from, n_hparams):
-                        train_args = {}
-                        train_args['dataset'] = dataset
-                        train_args['algorithm'] = algorithm
-                        train_args['test_envs'] = test_envs
-                        train_args['holdout_fraction'] = holdout_fraction
-                        train_args['hparams_seed'] = hparams_seed
-                        train_args['data_dir'] = data_dir
-                        train_args['task'] = task
-                        train_args['trial_seed'] = trial_seed
-                        train_args['seed'] = misc.seed_hash(dataset,
-                            algorithm, test_envs, hparams_seed, trial_seed)
-                        train_args['wandb_project'] = wandb_project
-                        train_args['wandb_entity'] = wandb_entity
-                        if wandb:
-                            train_args['wandb'] = True
-                        if steps is not None:
-                            train_args['steps'] = steps
-                        if hparams is not None:
-                            train_args['hparams'] = hparams
-                        args_list.append(train_args)
+                        for ablation_item in ablation_list:
+                            train_args = {}
+                            train_args['dataset'] = dataset
+                            train_args['algorithm'] = algorithm
+                            train_args['test_envs'] = test_envs
+                            train_args['holdout_fraction'] = holdout_fraction
+                            train_args['hparams_seed'] = hparams_seed
+                            train_args['data_dir'] = data_dir
+                            train_args['task'] = task
+                            train_args['trial_seed'] = trial_seed
+                            train_args['seed'] = misc.seed_hash(dataset,
+                                algorithm, test_envs, hparams_seed, trial_seed)
+                            train_args['wandb_project'] = wandb_project
+                            train_args['wandb_entity'] = wandb_entity
+                            train_args['hparams'] = ablation_item
+                            if wandb:
+                                train_args['wandb'] = True
+                            if steps is not None:
+                                train_args['steps'] = steps
+                            if hparams is not None:
+                                train_args['hparams'] = hparams
+                            args_list.append(train_args)
     return args_list
 
 def ask_for_confirmation():
@@ -161,6 +172,7 @@ if __name__ == "__main__":
     parser.add_argument('--wandb', action='store_true')
     parser.add_argument('--wandb_project', type=str, default="domainbed")
     parser.add_argument('--wandb_entity', type=str, default="namkhanh2172")
+    parser.add_argument('--ablation', type=str, default=None)
     args = parser.parse_args()
 
     args_list = make_args_list(
@@ -177,7 +189,8 @@ if __name__ == "__main__":
         wandb=args.wandb,
         hparams=args.hparams,
         wandb_project=args.wandb_project,
-        wandb_entity=args.wandb_entity
+        wandb_entity=args.wandb_entity,
+        ablation=args.ablation
     )
 
     jobs = [Job(train_args, args.output_dir) for train_args in args_list]

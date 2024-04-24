@@ -9,3 +9,5 @@ CUDA_VISIBLE_DEVICES=0 python -m domainbed.scripts.sweep launch\
        --skip_confirmation\
        --wandb\
        --single_test_envs\
+       --wandb_project domainbed3\
+       --wandb_entity namkhanh2172\

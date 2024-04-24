@@ -7,9 +7,11 @@ CUDA_VISIBLE_DEVICES=0 python3 -m domainbed.scripts.sweep launch\
        --output_dir=./MnistTest\
        --command_launcher local\
        --algorithms CAG \
-       --datasets RotatedMNIST\
-       --n_hparams 100\
-       --n_trials 1\
+       --datasets RotatedMNIST ColoredMNIST\
+       --n_hparams 20\
+       --n_trials 3\
        --skip_confirmation\
        --single_test_envs\
-       --wandb
+       --wandb\
+       --wandb_project domainbed3\
+       --wandb_entity namkhanh2172\

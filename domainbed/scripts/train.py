@@ -56,6 +56,8 @@ if __name__ == "__main__":
     # LOGGING
     parser.add_argument('--wandb', nargs='?', const=True, default=False,
                         help='toggle to use wandb for online saving')
+    parser.add_argument('--wandb_project', type=str, default="domainbed")
+    parser.add_argument('--wandb_entity', type=str, default="namkhanh2172")
     parser.add_argument('--log', action='store_true',
                         help='toggle to use tensorboard for offline saving')
     parser.add_argument("--verbose", action="store_true",

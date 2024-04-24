@@ -7,5 +7,6 @@ train_output/*
 wandb/*
 collect_wandb/*
 
+benchmark/*
 MnistTest/*
 .env

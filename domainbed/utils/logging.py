@@ -19,8 +19,8 @@ class Logging:
                              f"__{int(time.time())}")
 
             self.__run = wandb.init(
-                project="DomainBed_Rotated_Mnist_rtx_dalat",
-                entity="namkhanh2172",
+                project=args.wandb_project,
+                entity=args.wandb_entity,
                 config=args,
                 name=args.run_name,
                 force=True

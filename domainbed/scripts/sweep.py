@@ -97,7 +97,7 @@ def all_test_env_combinations(n):
             yield [i, j]
 
 def make_args_list(n_trials, dataset_names, algorithms, n_hparams_from, n_hparams, steps,
-    data_dir, task, holdout_fraction, single_test_envs, wandb, hparams):
+    data_dir, task, holdout_fraction, single_test_envs, wandb, hparams, wandb_project, wandb_entity):
     args_list = []
     for trial_seed in range(n_trials):
         for dataset in dataset_names:
@@ -121,6 +121,8 @@ def make_args_list(n_trials, dataset_names, algorithms, n_hparams_from, n_hparam
                         train_args['trial_seed'] = trial_seed
                         train_args['seed'] = misc.seed_hash(dataset,
                             algorithm, test_envs, hparams_seed, trial_seed)
+                        train_args['wandb_project'] = wandb_project
+                        train_args['wandb_entity'] = wandb_entity
                         if wandb:
                             train_args['wandb'] = True
                         if steps is not None:
@@ -157,6 +159,8 @@ if __name__ == "__main__":
     parser.add_argument('--single_test_envs', action='store_true')
     parser.add_argument('--skip_confirmation', action='store_true')
     parser.add_argument('--wandb', action='store_true')
+    parser.add_argument('--wandb_project', type=str, default="domainbed")
+    parser.add_argument('--wandb_entity', type=str, default="namkhanh2172")
     args = parser.parse_args()
 
     args_list = make_args_list(
@@ -171,7 +175,9 @@ if __name__ == "__main__":
         holdout_fraction=args.holdout_fraction,
         single_test_envs=args.single_test_envs,
         wandb=args.wandb,
-        hparams=args.hparams
+        hparams=args.hparams,
+        wandb_project=args.wandb_project,
+        wandb_entity=args.wandb_entity
     )
 
     jobs = [Job(train_args, args.output_dir) for train_args in args_list]

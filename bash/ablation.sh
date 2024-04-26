@@ -1,10 +1,9 @@
-
-python -m domainbed.scripts.sweep launch\
+python -m domainbed.scripts.sweep delete_incomplete\
        --data_dir=./domainbed/data/\
-       --output_dir=.Test/ablationMnist\
+       --output_dir=Test/ablation/cag_update\
        --command_launcher local\
        --algorithms CAG1 \
-       --datasets ColoredMNIST \
+       --datasets ColoredMNIST RotatedMNIST PACS VLCS TerraIncognita\
        --n_hparams 1\
        --n_trials 1\
        --skip_confirmation\
@@ -12,4 +11,4 @@ python -m domainbed.scripts.sweep launch\
        --single_test_envs\
        --wandb_project DomainBed3\
        --wandb_entity namkhanh2172\
-       --ablation "{'cagrad_c':[0.5,0.1,0.05]}"\
+       --ablation "{'cag_update':[1,2,3,4,5,6,7,8,9,10]}"

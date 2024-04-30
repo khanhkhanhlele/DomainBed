@@ -240,6 +240,17 @@ class ERM_T(Algorithm):
 
         result_dict = {'loss': loss.item()}
 
+        domain_cnt = 0
+        total_diff = 0
+        for i_domain, _ in enumerate(minibatches):
+            for j_domain, _ in enumerate(minibatches):
+                if j_domain > i_domain:
+                    domain_cnt += 1
+                    diff = self.cos_sim(self.model_origin, self.network_specific[i_domain], self.network_specific[j_domain])
+                    total_diff += diff
+        avg_diff = total_diff / domain_cnt
+        avg_angle_dict = {f"domain average angle": avg_diff}
+
         diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
 
@@ -254,6 +265,7 @@ class ERM_T(Algorithm):
         grad_norm_dict = {f"grad_progress": grad_norm}
 
         self.u_count += 1
+        result_dict.update(avg_angle_dict)
         result_dict.update(domain_diff_dict)
         result_dict.update(domain_angle_dict)
         result_dict.update(invariant_dict)
@@ -342,6 +354,17 @@ class Fish_T(Algorithm):
         )
         self.network.reset_weights(meta_weights)
 
+        domain_cnt = 0
+        total_diff = 0
+        for i_domain, _ in enumerate(minibatches):
+            for j_domain, _ in enumerate(minibatches):
+                if j_domain > i_domain:
+                    domain_cnt += 1
+                    diff = self.cos_sim(self.model_origin, self.network_specific[i_domain], self.network_specific[j_domain])
+                    total_diff += diff
+        avg_diff = total_diff / domain_cnt
+        avg_angle_dict = {f"domain average angle": avg_diff}
+
         diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
         angle = [self.cos_sim(model_origin, self.network_specific[i_domain], self.network) for i_domain in
@@ -359,6 +382,7 @@ class Fish_T(Algorithm):
         # print(grad_norm_dict)
 
         self.u_count += 1
+        result_dict.update(avg_angle_dict)
         result_dict.update(domain_diff_dict)
         result_dict.update(domain_angle_dict)
         result_dict.update(invariant_dict)
@@ -610,6 +634,17 @@ class CAG_T(Algorithm):
             )
             self.network.reset_weights(meta_weights)
 
+        domain_cnt = 0
+        total_diff = 0
+        for i_domain, _ in enumerate(minibatches):
+            for j_domain, _ in enumerate(minibatches):
+                if j_domain > i_domain:
+                    domain_cnt += 1
+                    diff = self.cos_sim(self.model_origin, self.network_specific[i_domain], self.network_specific[j_domain])
+                    total_diff += diff
+        avg_diff = total_diff / domain_cnt
+        avg_angle_dict = {f"domain average angle": avg_diff}
+
         diff = [self.diff_weight(self.network_inner[i_domain], self.network) for i_domain in range(self.num_domains)]
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
         if self.diff_weight(self.network_inner[i_domain], self.network) != 0:
@@ -633,6 +668,7 @@ class CAG_T(Algorithm):
         # print(grad_norm_dict)
 
         self.u_count += 1
+        result_dict.update(avg_angle_dict)
         result_dict.update(domain_diff_dict)
         result_dict.update(domain_angle_dict)
         result_dict.update(invariant_dict)
@@ -758,6 +794,17 @@ class Fishr_T(Algorithm):
         self.optimizer.step()
         result_dict = {'loss': objective.item(), 'nll': all_nll.item(), 'penalty': penalty.item()}
 
+        domain_cnt = 0
+        total_diff = 0
+        for i_domain, _ in enumerate(minibatches):
+            for j_domain, _ in enumerate(minibatches):
+                if j_domain > i_domain:
+                    domain_cnt += 1
+                    diff = self.cos_sim(self.model_origin, self.network_specific[i_domain], self.network_specific[j_domain])
+                    total_diff += diff
+        avg_diff = total_diff / domain_cnt
+        avg_angle_dict = {f"domain average angle": avg_diff}
+
         diff = [self.diff_weight(self.network_specific[i_domain], self.network) for i_domain in range(self.num_domains)]
         domain_diff_dict = {f"diff_{i}": value for i, value in enumerate(diff)}
 
@@ -772,6 +819,7 @@ class Fishr_T(Algorithm):
         grad_norm_dict = {f"grad_progress": grad_norm}
 
         self.u_count += 1
+        result_dict.update(avg_angle_dict)
         result_dict.update(domain_diff_dict)
         result_dict.update(domain_angle_dict)
         result_dict.update(invariant_dict)

@@ -53,7 +53,7 @@ def _hparams(algorithm, dataset, random_seed):
     elif algorithm == 'CAG' or algorithm == 'CAG1' or algorithm == 'CAG_T':
         _hparam('meta_lr', 0.1, lambda r: r.choice([0.05, 0.1, 0.5]))
         _hparam('cagrad_c', 0.2, lambda r: r.choice([0.05, 0.1, 0.5]))
-        _hparam('cag_update', 5, lambda r: int(r.choice([1, 5, 10])))
+        _hparam('cag_update', 1, lambda r: int(r.choice([1, 5, 10])))
         _hparam('cag_lr', 25, lambda r: int(r.choice([10, 25, 50])))
         _hparam('cag_mom', 0.1, lambda r: int(r.choice([0.1, 0.5, 1.0])))
         _hparam('cag_step', 30, lambda r: int(r.choice([21, 35, 50])))

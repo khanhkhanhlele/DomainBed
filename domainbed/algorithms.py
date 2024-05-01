@@ -640,7 +640,7 @@ class CAG_T(Algorithm):
             for j_domain, _ in enumerate(minibatches):
                 if j_domain > i_domain:
                     domain_cnt += 1
-                    diff = self.cos_sim(self.model_origin, self.network_specific[i_domain], self.network_specific[j_domain])
+                    diff = self.cos_sim(self.model_origin, self.network_inner[i_domain], self.network_inner[j_domain])
                     total_diff += diff
         avg_diff = total_diff / domain_cnt
         avg_angle_dict = {f"domain average angle": avg_diff}

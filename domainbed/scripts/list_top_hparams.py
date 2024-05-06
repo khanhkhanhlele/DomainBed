@@ -105,6 +105,18 @@ def todo_rename(records, selection_method, latex):
     print_table(table, header_text, alg_names, col_labels, colwidth=25,
         latex=latex)
 
+def gen_bash_file(arg,hparams):
+    command = f"python -m domainbed.scripts.train\
+        --data_dir {arg['data_dir']}\
+        --dataset {arg['dataset']}\
+        --algorithm {arg['algorithm']}\
+        --test_envs {arg['test_envs'][0]}\
+        --output_dir {arg['output_dir']}x\
+        --trial_seed {arg['trial_seed']}\
+        --hparams_seed {arg['hparams_seed']}\
+        --seed {arg['seed']}\
+        --hparams '{json.dumps(hparams)}'"
+    return command
 if __name__ == "__main__":
     np.set_printoptions(suppress=True)
 
@@ -114,7 +126,9 @@ if __name__ == "__main__":
     parser.add_argument('--dataset', required=True)
     parser.add_argument('--algorithm', required=True)
     parser.add_argument('--test_env', type=int, required=True)
-    parser.add_argument('--only_best',action='store_true')
+    parser.add_argument('--topk', type=int, default=0)
+    parser.add_argument('--add_bash', action='store_true')
+    parser.add_argument('--bash_dir', type=str, default='tune_hparams/bash_hparams.sh')
     args = parser.parse_args()
 
     records = reporting.load_records(args.input_dir)
@@ -141,7 +155,7 @@ if __name__ == "__main__":
         for group in records:
             print(f"trial_seed: {group['trial_seed']}")
             best_hparams = selection_method.hparams_accs(group['records'])
-            if not args.only_best:
+            if args.topk == 0 :
                 for run_acc, hparam_records in best_hparams:
                     print(f"\t{run_acc}", end='')
                     # for r in hparam_records:
@@ -157,7 +171,16 @@ if __name__ == "__main__":
                     # for output_dir in output_dirs:
                     #     print(f"\t\t\t{output_dir}")
             else:
-                run_acc, hparam_records = best_hparams[0]
-                print(run_acc)
-                print(hparam_records[0]['args'])
-                print(hparam_records[0]['hparams'])
+                for i in range(args.topk):
+                    print(f"Top {i+1}")
+                    run_acc, hparam_records = best_hparams[i]
+                    print(run_acc)
+                    # print(hparam_records[0]['args'])
+                    # print(hparam_records[0]['hparams'])
+                    bash_file = gen_bash_file(hparam_records[0]['args'],hparam_records[0]['hparams'])
+                    print(bash_file)
+                    if args.add_bash:
+                        bash_dir = args.bash_dir
+                        with open (bash_dir,'a') as f:
+                            f.write("\n")
+                            f.write(bash_file)

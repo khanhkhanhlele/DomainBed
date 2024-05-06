@@ -12,7 +12,7 @@ class Logging:
         self.__epoch = 0
 
         if args.wandb:
-            # wandb.login(key="1eac4d04cc3cc4aed9a1409cd8eb7dc0f6537ef2")
+            wandb.login(key="1eac4d04cc3cc4aed9a1409cd8eb7dc0f6537ef2")
             args.run_name = (f"{args.dataset}_{args.algorithm}"
                              f"_{args.hparams_seed}_{args.trial_seed}"
                              f"_{args.test_envs}"

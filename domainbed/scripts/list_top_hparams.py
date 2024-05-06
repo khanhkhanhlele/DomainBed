@@ -108,8 +108,7 @@ def todo_rename(records, selection_method, latex):
 if __name__ == "__main__":
     np.set_printoptions(suppress=True)
 
-    parser = argparse.ArgumentParser(
-        description="Domain generalization testbed")
+    parser = argparse.ArgumentParser(description="Domain generalization testbed")
     parser.add_argument("--input_dir", required=True)
     parser.add_argument('--dataset', required=True)
     parser.add_argument('--algorithm', required=True)
@@ -148,7 +147,3 @@ if __name__ == "__main__":
                     if(k in {"cagrad_c", "cag_update", "meta_lr"}):
                         print('\t\t\t{}: {}'.format(k, v), end='')       
                 print("")
-                # print("\t\toutput_dirs:")
-                # output_dirs = hparam_records.select('args.output_dir').unique()
-                # for output_dir in output_dirs:
-                #     print(f"\t\t\t{output_dir}")

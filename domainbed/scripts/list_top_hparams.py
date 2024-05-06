@@ -115,7 +115,8 @@ def gen_bash_file(arg,hparams):
         --trial_seed {arg['trial_seed']}\
         --hparams_seed {arg['hparams_seed']}\
         --seed {arg['seed']}\
-        --hparams '{json.dumps(hparams)}'"
+        --hparams '{json.dumps(hparams)}'\
+        --wandb"
     return command
 if __name__ == "__main__":
     np.set_printoptions(suppress=True)

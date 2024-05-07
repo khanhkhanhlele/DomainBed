@@ -111,13 +111,13 @@ def gen_bash_file(arg,hparams):
         --dataset {arg['dataset']}\
         --algorithm {arg['algorithm']}\
         --test_envs {args.test_env}\
-        --output_dir {arg['output_dir']}\
+        --output_dir {arg['output_dir']}_57_1\
         --trial_seed {arg['trial_seed']}\
         --hparams_seed {arg['hparams_seed']}\
         --seed {arg['seed']}\
         --hparams '{json.dumps(hparams)}'\
         --wandb\
-        --checkpoint_freq 1000\
+        --checkpoint_freq 2000\
         --steps 20000"
     return command
 if __name__ == "__main__":
@@ -151,7 +151,7 @@ if __name__ == "__main__":
         model_selection.OracleSelectionMethod,
     ]
     bash_dir = args.bash_dir
-    with open (bash_dir,'w') as f:
+    with open (bash_dir,'a') as f:
         f.write("#!/bin/bash\n")
 
     for selection_method in SELECTION_METHODS:

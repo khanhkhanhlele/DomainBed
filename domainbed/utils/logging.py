@@ -19,8 +19,8 @@ class Logging:
                              f"__{int(time.time())}")
 
             self.__run = wandb.init(
-                project="DoG-CaG",
-                entity="DomainBed",
+                project="DomainBed3",  # project="DoG-CaG",
+                entity="namkhanh2172",  # entity="DomainBed",
                 config=args,
                 name=args.run_name,
                 force=True
@@ -66,7 +66,6 @@ class Logging:
             else:
                 self.__log_avg[log_key] = self.__log[log_key]
 
-
         if self.__args.wandb:
             self.__update_wandb()
 
@@ -81,7 +80,7 @@ class Logging:
 
     def watch(self, model, num_train_batch):
         self.__run.watch(models=model, log='all', log_freq=num_train_batch, log_graph=True)
-    
+
     def save_file(self, path):
         self.__run.save(path)
 

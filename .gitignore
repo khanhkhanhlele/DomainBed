@@ -9,4 +9,6 @@ collect_wandb/*
 
 MnistTest/*
 Test/*
+benchmark/*
+Test/*
 .env

@@ -17,12 +17,12 @@
 #         --bash_dir 'tune_hparams/domain.sh'
 # done
 
-for env in {0..3}; do
+for env in {0..6}; do
     python -u -m domainbed.scripts.list_top_hparams \
         --input_dir ./train_output --algorithm CAG1 \
-        --dataset TerraIncognita --test_env $env \
+        --dataset DomainNet --test_env $env \
         --topk 1 \
-        --bash_dir 'tune_hparams/terra.sh'\
+        --bash_dir 'tune_hparams/domain.sh'\
         --add_bash 
 done
 

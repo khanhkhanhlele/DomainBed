@@ -106,19 +106,19 @@ def todo_rename(records, selection_method, latex):
         latex=latex)
 
 def gen_bash_file(arg,hparams):
-    command = f"python -m domainbed.scripts.train\
+    command = f"CUDA_VISIBLE_DEVICES=1 \
+        python -m domainbed.scripts.train\
         --data_dir {arg['data_dir']}\
         --dataset {arg['dataset']}\
         --algorithm {arg['algorithm']}\
         --test_envs {args.test_env}\
-        --output_dir {arg['output_dir']}\
+        --output_dir Test/{arg['output_dir']}\
         --trial_seed {arg['trial_seed']}\
         --hparams_seed {arg['hparams_seed']}\
         --seed {arg['seed']}\
         --hparams '{json.dumps(hparams)}'\
-        --wandb\
         --checkpoint_freq 2000\
-        --steps 20000"
+        --steps 30001"
     return command
 if __name__ == "__main__":
     np.set_printoptions(suppress=True)
@@ -152,8 +152,6 @@ if __name__ == "__main__":
         model_selection.OracleSelectionMethod,
     ]
     bash_dir = args.bash_dir
-    with open (bash_dir,'a') as f:
-        f.write("\n")
 
     for selection_method in SELECTION_METHODS:
         print("---------------------------------")

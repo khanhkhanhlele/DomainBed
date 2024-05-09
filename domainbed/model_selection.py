@@ -68,6 +68,7 @@ class OracleSelectionMethod(SelectionMethod):
         test_out_acc_key = 'env{}_out_acc'.format(test_env)
         test_in_acc_key = 'env{}_in_acc'.format(test_env)
         chosen_record = run_records.sorted(lambda r: r['step'])[-1]
+        # chosen_record = run_records.sorted(lambda r: r[test_out_acc_key])[-1] #fake
         return {
             'val_acc':  chosen_record[test_out_acc_key],
             'test_acc': chosen_record[test_in_acc_key]

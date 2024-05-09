@@ -6,9 +6,9 @@ backpack
 parameterized
 Pillow
 wilds
-wandb
+wandb==0.15.11
 matplotlib
 backpack-for-pytorch
-# tensorboard
+tensorboard
 
 #test

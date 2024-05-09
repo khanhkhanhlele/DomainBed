@@ -111,7 +111,7 @@ def gen_bash_file(arg,hparams):
         --dataset {arg['dataset']}\
         --algorithm {arg['algorithm']}\
         --test_envs {args.test_env}\
-        --output_dir {arg['output_dir']}_57_1\
+        --output_dir {arg['output_dir']}\
         --trial_seed {arg['trial_seed']}\
         --hparams_seed {arg['hparams_seed']}\
         --seed {arg['seed']}\
@@ -142,7 +142,8 @@ if __name__ == "__main__":
         lambda r:
             r['dataset'] == args.dataset and
             r['algorithm'] == args.algorithm and
-            r['test_env'] == args.test_env
+            r['test_env'] == args.test_env and
+            r['trial_seed'] in [0, 1, 2]
     )
 
     SELECTION_METHODS = [
@@ -152,7 +153,7 @@ if __name__ == "__main__":
     ]
     bash_dir = args.bash_dir
     with open (bash_dir,'a') as f:
-        f.write("#!/bin/bash\n")
+        f.write("\n")
 
     for selection_method in SELECTION_METHODS:
         print("---------------------------------")

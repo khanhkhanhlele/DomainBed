@@ -10,3 +10,4 @@ python -m domainbed.scripts.sweep launch\
        --skip_confirmation\
        --wandb\
        --single_test_envs\
+       --steps 50000

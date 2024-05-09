@@ -32,7 +32,7 @@ for run in runs:
         if "results.jsonl" in file.name:
             file_path = os.path.join(destination_folder, file.name)
             if not os.path.exists(file_path):
-                file.download(root=destination_folder, replace=False)
+                file.download(root=destination_folder, replace=True)
                 file_dir = os.path.join(destination_folder, os.path.dirname(file.name))
                 with open(os.path.join(file_dir, 'done'), 'w') as f:
                     f.write('done') 

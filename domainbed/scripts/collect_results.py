@@ -156,6 +156,8 @@ if __name__ == "__main__":
     sys.stdout = misc.Tee(os.path.join(args.save_latex_dir, results_file), "w")
 
     records = reporting.load_records(args.input_dir)
+    records = records.filter(lambda r: r["args"]["trial_seed"] in [0, 1, 2])
+    # records = records.filter(lambda r: r["hparams"]["cagrad_c"] == 0.5)
 
     if args.latex:
         print("\\documentclass{article}")

@@ -1,0 +1,219 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\begin{document}
+\section{Full DomainBed results}
+% Total records: 133672
+
+\subsection{Model selection: training-domain validation set}
+
+\subsubsection{ColoredMNIST}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Algorithm}   & \textbf{+90\%}       & \textbf{+80\%}       & \textbf{-90\%}       & \textbf{Avg}         \\
+\midrule
+CAG1                 & 70.9 $\pm$ 0.5       & 73.4 $\pm$ 0.3       & 10.3 $\pm$ 0.1       & 51.5                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{RotatedMNIST}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{0}           & \textbf{15}          & \textbf{30}          & \textbf{45}          & \textbf{60}          & \textbf{75}          & \textbf{Avg}         \\
+\midrule
+CAG1                 & 95.8 $\pm$ 0.1       & 98.7 $\pm$ 0.0       & 99.0 $\pm$ 0.0       & 98.9 $\pm$ 0.1       & 98.7 $\pm$ 0.0       & 96.0 $\pm$ 0.2       & 97.8                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{VLCS}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{C}           & \textbf{L}           & \textbf{S}           & \textbf{V}           & \textbf{Avg}         \\
+\midrule
+CAG1                 & 98.9 $\pm$ 0.1       & 63.1 $\pm$ 0.6       & 77.6 $\pm$ 0.3       & 79.2 $\pm$ 1.1       & 79.7                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{PACS}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{A}           & \textbf{C}           & \textbf{P}           & \textbf{S}           & \textbf{Avg}         \\
+\midrule
+CAG1                 & 89.1 $\pm$ 0.4       & 80.4 $\pm$ 1.0       & 97.8 $\pm$ 0.2       & 79.3 $\pm$ 1.7       & 86.6                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{OfficeHome}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{A}           & \textbf{C}           & \textbf{P}           & \textbf{R}           & \textbf{Avg}         \\
+\midrule
+CAG1                 & 65.2 $\pm$ 1.0       & 55.9 $\pm$ 1.1       & 77.5 $\pm$ 0.4       & 78.8 $\pm$ 0.6       & 69.3                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{TerraIncognita}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{L100}        & \textbf{L38}         & \textbf{L43}         & \textbf{L46}         & \textbf{Avg}         \\
+\midrule
+CAG1                 & 50.5 $\pm$ 2.7       & 42.3 $\pm$ 2.3       & 52.8 $\pm$ 0.7       & 40.4 $\pm$ 1.4       & 46.5                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{DomainNet}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{clip}        & \textbf{info}        & \textbf{paint}       & \textbf{quick}       & \textbf{real}        & \textbf{sketch}      & \textbf{Avg}         \\
+\midrule
+CAG1                 & 59.5 $\pm$ 1.9       & 20.1 $\pm$ 0.1       & 45.9 $\pm$ 1.2       & 12.8 $\pm$ 0.3       & 58.0 $\pm$ 0.1       & 46.7 $\pm$ 0.2       & 40.5                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{Averages}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Algorithm}        & \textbf{ColoredMNIST}     & \textbf{RotatedMNIST}     & \textbf{VLCS}             & \textbf{PACS}             & \textbf{OfficeHome}       & \textbf{TerraIncognita}   & \textbf{DomainNet}        & \textbf{Avg}              \\
+\midrule
+CAG1                      & 51.5 $\pm$ 0.2            & 97.8 $\pm$ 0.1            & 79.7 $\pm$ 0.2            & 86.6 $\pm$ 0.7            & 69.3 $\pm$ 0.7            & 46.5 $\pm$ 0.2            & 40.5 $\pm$ 0.2            & 67.4                      \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsection{Model selection: test-domain validation set (oracle)}
+
+\subsubsection{ColoredMNIST}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Algorithm}   & \textbf{+90\%}       & \textbf{+80\%}       & \textbf{-90\%}       & \textbf{Avg}         \\
+\midrule
+CAG1                 & 87.7 $\pm$ 1.8       & 79.8 $\pm$ 0.2       & 31.2 $\pm$ 1.6       & 66.3                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{RotatedMNIST}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{0}           & \textbf{15}          & \textbf{30}          & \textbf{45}          & \textbf{60}          & \textbf{75}          & \textbf{Avg}         \\
+\midrule
+CAG1                 & 96.4 $\pm$ 0.1       & 98.6 $\pm$ 0.0       & 99.0 $\pm$ 0.0       & 98.9 $\pm$ 0.1       & 98.9 $\pm$ 0.0       & 95.7 $\pm$ 0.2       & 97.9                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{VLCS}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{C}           & \textbf{L}           & \textbf{S}           & \textbf{V}           & \textbf{Avg}         \\
+\midrule
+CAG1                 & 99.3 $\pm$ 0.1       & 67.5 $\pm$ 0.4       & 79.1 $\pm$ 0.5       & 82.3 $\pm$ 0.5       & 82.0                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{PACS}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{A}           & \textbf{C}           & \textbf{P}           & \textbf{S}           & \textbf{Avg}         \\
+\midrule
+CAG1                 & 89.7 $\pm$ 0.4       & 81.4 $\pm$ 0.9       & 98.0 $\pm$ 0.2       & 84.3 $\pm$ 0.6       & 88.4                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{OfficeHome}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{A}           & \textbf{C}           & \textbf{P}           & \textbf{R}           & \textbf{Avg}         \\
+\midrule
+CAG1                 & 65.4 $\pm$ 0.4       & 58.1 $\pm$ 0.3       & 77.5 $\pm$ 0.5       & 78.9 $\pm$ 0.6       & 70.0                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{TerraIncognita}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{L100}        & \textbf{L38}         & \textbf{L43}         & \textbf{L46}         & \textbf{Avg}         \\
+\midrule
+CAG1                 & 62.3 $\pm$ 1.4       & 50.5 $\pm$ 0.9       & 58.4 $\pm$ 0.4       & 45.6 $\pm$ 0.7       & 54.2                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{DomainNet}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Algorithm}   & \textbf{clip}        & \textbf{info}        & \textbf{paint}       & \textbf{quick}       & \textbf{real}        & \textbf{sketch}      & \textbf{Avg}         \\
+\midrule
+CAG1                 & 59.2 $\pm$ 1.8       & 20.3 $\pm$ 0.3       & 45.7 $\pm$ 1.1       & 12.9 $\pm$ 0.1       & 58.0 $\pm$ 0.1       & 46.7 $\pm$ 0.2       & 40.5                 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+
+\subsubsection{Averages}
+
+\begin{center}
+\adjustbox{max width=\textwidth}{%
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Algorithm}        & \textbf{ColoredMNIST}     & \textbf{RotatedMNIST}     & \textbf{VLCS}             & \textbf{PACS}             & \textbf{OfficeHome}       & \textbf{TerraIncognita}   & \textbf{DomainNet}        & \textbf{Avg}              \\
+\midrule
+CAG1                      & 66.3 $\pm$ 1.2            & 97.9 $\pm$ 0.0            & 82.0 $\pm$ 0.1            & 88.4 $\pm$ 0.5            & 70.0 $\pm$ 0.4            & 54.2 $\pm$ 0.3            & 40.5 $\pm$ 0.2            & 71.3                      \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\end{document}

@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=1 python -m domainbed.scripts.sweep delete_incomplete\
+CUDA_VISIBLE_DEVICES=1 python -m domainbed.scripts.sweep launch\
        --data_dir=./domainbed/data/\
        --output_dir=./train_output\
        --command_launcher local\
@@ -9,3 +9,4 @@ CUDA_VISIBLE_DEVICES=1 python -m domainbed.scripts.sweep delete_incomplete\
        --skip_confirmation\
        --wandb\
        --single_test_envs\
+       --steps 20001

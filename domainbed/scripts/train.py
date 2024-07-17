@@ -123,12 +123,12 @@ if __name__ == "__main__":
     # To allow unsupervised domain adaptation experiments, we split each test
     # env into 'in-split', 'uda-split' and 'out-split'. The 'in-split' is used
     # by collect_results.py to compute classification accuracies.  The
-    # 'out-split' is used by the Oracle model selectino method. The unlabeled
+    # 'out-split' is used by the Oracle model selecting method. The unlabeled
     # samples in 'uda-split' are passed to the algorithm at training time if
     # args.task == "domain_adaptation". If we are interested in comparing
     # domain generalization and domain adaptation results, then domain
     # generalization algorithms should create the same 'uda-splits', which will
-    # be discared at training.
+    # be discarded at training.
     in_splits = []
     out_splits = []
     uda_splits = []
@@ -217,6 +217,10 @@ if __name__ == "__main__":
 
     last_results_keys = None
     for step in range(start_step, n_steps):
+        """ ======================== Training ============================== 
+            - train_minibatches_iterator
+                + in_splits -> VLCS = (V + L + C + S)*0.8
+        """
         step_start_time = time.time()
         minibatches_device = [(x.to(device), y.to(device))
             for x,y in next(train_minibatches_iterator)]
@@ -227,6 +231,15 @@ if __name__ == "__main__":
             uda_device = None
         step_vals = algorithm.update(minibatches_device, uda_device)
         checkpoint_vals['step_time'].append(time.time() - step_start_time)
+
+    """ =========================== Evaluating ============================== 
+            - evals = zip(eval_loader_names, eval_loaders, eval_weights)
+                + in_splits + out_splits + uda_splits
+                    * in_splits -> VLCS = (V + L + C + S)*0.8
+                    * out_splits -> VLCS = (V + L + C + S)*0.2
+                    * uda_splits
+    
+    """
 
         for key, val in step_vals.items():
             checkpoint_vals[key].append(val)
